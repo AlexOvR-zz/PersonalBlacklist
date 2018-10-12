@@ -19,6 +19,7 @@
 
 locales\enUS.lua
 locales\esMX.lua
+locales\esES.lua
 config.lua
 init.lua
 

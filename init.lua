@@ -41,12 +41,12 @@ core.commands = {
 	
 	["help"] = function()
 		print(" ");
-		core:Print("List of slash commands:")
-		core:Print("|cff00cc66/pbl show|r - shows config menu");
+		core:Print(L["commandsListChat"]..":")
+		core:Print("|cff00cc66/pbl show|r - "..L["commandShowChat"]);
 		core:Print("|cff00cc66/pbl help|r - shows help info");
 		--core:Print("|cff00cc66/pbl ban|r - add a player to the ban list");
 		--core:Print("|cff00cc66/pbl unban|r - removes a player from the ban list");
-		core:Print("|cff00cc66/pbl banlist|r - show the banlist");
+		core:Print("|cff00cc66/pbl banlist|r - "..L["commandBanListChat"]);
 		print(" ");
 	end,
 
@@ -142,8 +142,30 @@ function core:init(event, name)
 	if(not PBL_.bans.ban_categories) then PBL_.bans.ban_categories = { }; end
 	if(not PBL_.bans.ban_reasons) then PBL_.bans.ban_reasons = { }; end
 
-	PBL_.bans.ban_categories = {"--Categories--","All","Guild","Raid","Mythic+","PvP","World"};
-	PBL_.bans.ban_reasons = {"--Reasons--","All","Quiter","Toxic","Bad DPS","Bad Heal","Bad Tank","Bad Player","AFKer","Ninja","Spammer","Scammer","Racist"};
+	PBL_.bans.ban_categories = {
+		L["dropDownCat"],
+		L["dropDownAll"],
+		L["dropDownGuild"],
+		L["dropDownRaid"],
+		L["dropDownMythic"],
+		L["dropDownPvP"],
+		L["dropDownWorld"]
+	};
+	PBL_.bans.ban_reasons = {
+		L["dropDownRea"],
+		L["dropDownAll"],
+		L["dropDownQuit"],
+		L["dropDownToxic"],
+		L["dropDownBadDPS"],
+		L["dropDownBadHeal"],
+		L["dropDownBadTank"],
+		L["dropDownBadPlayer"],
+		L["dropDownAFK"],
+		L["dropDownNinja"],
+		L["dropDownSpam"],
+		L["dropDownScam"],
+		L["dropDownRac"]
+	};
 
 	StaticPopupDialogs.CONFIRM_LEAVE_IGNORE = {
 		text = "%s is on your PBL banned list. Do you want to leave this group?",

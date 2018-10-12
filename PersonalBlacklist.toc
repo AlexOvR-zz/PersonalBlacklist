@@ -18,7 +18,6 @@
 ## SavedVariables: PBL_
 
 config.lua
-timer.lua
 init.lua
 
 libs\libs.xml

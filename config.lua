@@ -419,28 +419,22 @@ function Config:CreateMenu()
 	----------------------------------
 
 	-- BUTTONS!! -- Para: point, relativeFrame, relativePoint, xOffset, yOffset,  text, id
-	-- Save Button: -- 
-	content1.saveBtn = self:CreateButton("CENTER", content1, "TOP", -250, -70, "Add", 1);  -- TODO: OPtimization Wrap parameters in a table
-	-- Reset Button:	
-	content1.resetBtn = self:CreateButton("TOPLEFT", content1.saveBtn, "TOPRIGHT", 15, 0, "Remove", 2);
-	-- Load Button:	
-	--content1.loadBtn = self:CreateButton("TOP", content1.saveBtn, "BOTTOM", 0, -10, "Reload", 3);
+	-- Add Button: -- 
+	content1.addBtn = self:CreateButton("CENTER", content1, "TOP", -250, -70, "Add", 1);  -- TODO: OPtimization Wrap parameters in a table
+	-- Remove Button:	
+	content1.rmvBtn = self:CreateButton("TOPLEFT", content1.addBtn, "TOPRIGHT", 15, 0, "Remove", 2);
 
 	-- SLIDERS!! -- Para  point, relativeFrame, relativePoint, yOffset , xOffset, minVal , maxVal, defaultVal, stepVal, id
 	-- Slider 1: --
 	--content1.slider1 = self:CreateSlider("TOP", content1.loadBtn, "BOTTOM", 0, -20, 1, 100, 50, 30, 1);
-	-- Slider 2:
-	--content1.slider2 = self:CreateSlider("TOP", content1.slider1, "BOTTOM", 0, -50, 1, 100, 40, 30, 2);
 
 	-- CHECK BUTTONS!! -- Para: point, relativeFrame, relativePoint, yOffset, xOffset, text, toolTxt, checked, id
 	-- Check Button 1: -- 
 	--content1.checkBtn1 = self:CreateCheckbox("TOP", content1.slider1,"BOTTOM", 0, -20, "My Check Button!","1st Checkbox", true, 1);
-	-- Check Button 2:
-	--content1.checkBtn2 = self:CreateCheckbox("TOP", content1.slider2,"BOTTOM", 0, -20, "Another Check Button!","2nd Checkbox", false, 2);
 
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	-- Edit Box 1: (Ban List) --
-	content1.banEditBox = self:CreateEditBox("TOP", content1.saveBtn, "TOPLEFT", 23, 48, 170, 25, false, false, 1);
+	content1.banEditBox = self:CreateEditBox("TOP", content1.addBtn, "TOPLEFT", 23, 48, 170, 25, false, false, 1);
 	-- Edit Box 2 (Category List)
 	content1.catEditBox = self:CreateEditBox("TOP", content1.banEditBox, "RIGHT", 0, 210, 170, 450, false, true, 2);
 	-- Edit Box 3 (Reason List)
@@ -448,24 +442,24 @@ function Config:CreateMenu()
 
 	-- DROPDOWN MENUS!! -- Para: point, relativeFrame, relativePoint, yOffset, xOffset, width, height, id, txt
 	-- DropDown 1: (Category List) --
-	content1.catDrop = self:CreateDropDownMenu("TOP", content1.saveBtn, "BOTTOM", -50, 50, 165, 30, 1, "Category ");
+	content1.catDrop = self:CreateDropDownMenu("TOP", content1.addBtn, "BOTTOM", -50, 50, 165, 30, 1, "Category ");
 	-- DropDown 2: (Reason List) --
-	content1.reaDrop = self:CreateDropDownMenu("TOP", content1.saveBtn, "BOTTOM", -100, 50, 165, 30, 2, "Reason ");
+	content1.reaDrop = self:CreateDropDownMenu("TOP", content1.addBtn, "BOTTOM", -100, 50, 165, 30, 2, "Reason ");
 
-	
 	-- Easy Menus!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, txt, id
 	--content1.catEasyMenu = self:CreateEasyMenu("TOP", content1.saveBtn, "RIGHT", 0, 140, 130, 25, "Categories:", 1 );
 
-	-- TEXTS!!!! -- Para: point, relativeFrame, xOffset, yOffset, , text
-	content1.banText = self:CreateTxtInstance("TOPLEFT", content1.saveBtn, "TOP", -36, 42, "Insert Character Name");
-	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1.saveBtn, "TOP", 174, 42, "Character Name-Realm");
-	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1.saveBtn, "TOP", 365, 42, "Category/Reason");
+	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt
+	content1.banText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -36, 42, "Insert Character Name");
+	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 174, 42, "Character Name-Realm");
+	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 365, 42, "Category/Reason");
 	content1.authorText = self:CreateTxtInstance("BOTTOM", content1.reaDrop, "BOTTOM", -65, -70, "Created By Xyløns @ Ragnaros US");
-	--self:CreateTxtInstance("A TESTREOODEN!!!");
 	----------------------------------
 	-- Content2
-	----------------------------------
-	--content2.catDrop = self:CreateDropDownMenu("TOP", content2, "BOTTOM", -150, 50, 200, 20, 1, "Favorite number 3: ");
+	----------------------------------	
+	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", -30, 280, "Collaborators");
+	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 20, 370, 25, false, true, 4);
+	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nART/Design by Bexonight @ Ragnaros US \nDevelopment by Xyløns & Heomel @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US");
 	----------------------------------
 	-- Content3
 	----------------------------------

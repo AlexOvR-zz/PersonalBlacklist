@@ -16,9 +16,13 @@ How to copy a weird name into the PBL ? Simple toggles your chat and shift+clic
 List of commands:
 
 /pbl Show  (Toggles the PBL UI)
+
 /pbl ban name-realm  (Adds a player to your PBL list under the category of All and with the reason All)
+
 /pbl remove name-realm (Removes that player from your PBL list)
+
 /pbl banlist  (Will print all your banlist into your chat)
+
 
 This Blacklist record will allow you to always remember the names of those undesirable players.
 

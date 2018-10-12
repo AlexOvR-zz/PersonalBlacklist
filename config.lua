@@ -171,15 +171,23 @@ function Config:CreateCheckbox(point, relativeFrame, relativePoint, yOffset, xOf
 	return checkBox;
 end
 
-function Config:CreateTxtInstance(point, relativeFrame,relativePoint, yOffset, xOffset, txt)
+function Config:CreateTxtInstance(point, relativeFrame,relativePoint, yOffset, xOffset, txt, id)
 
 	local txtFrame = CreateFrame("Frame", nil, relativeFrame);
 		  txtFrame:SetPoint(point, relativeFrame, relativePoint, yOffset, xOffset);	
 		  txtFrame:SetSize(80, 20);
 
-    local textInstance = txtFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-		  textInstance:SetPoint("TOPLEFT", 0, 0);
-		  textInstance:SetText(txt);
+	if(id == 2)then
+      local textInstance = txtFrame:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall");
+	  		textInstance:SetPoint("TOPLEFT", 0, 0);
+		    textInstance:SetText(txt);
+	else
+	  local textInstance = txtFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge");
+	  	  	textInstance:SetPoint("TOPLEFT", 0, 0);
+		    textInstance:SetText(txt);
+	end
+	
+
 
 	 return txtFrame;
 
@@ -423,7 +431,7 @@ function Config:CreateMenu()
 
 	-- BUTTONS!! -- Para: point, relativeFrame, relativePoint, xOffset, yOffset,  text, id
 	-- Add Button: -- 
-	content1.addBtn = self:CreateButton("CENTER", content1, "TOP", -250, -70, "Add", 1);  -- TODO: OPtimization Wrap parameters in a table
+	content1.addBtn = self:CreateButton("CENTER", content1, "TOP", -250, -90, "Add", 1);  -- TODO: OPtimization Wrap parameters in a table
 	-- Remove Button:	
 	content1.rmvBtn = self:CreateButton("TOPLEFT", content1.addBtn, "TOPRIGHT", 15, 0, "Remove", 2);
 
@@ -437,7 +445,7 @@ function Config:CreateMenu()
 
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	-- Edit Box 1: (Ban List) --
-	content1.banEditBox = self:CreateEditBox("TOP", content1.addBtn, "TOPLEFT", 23, 48, 170, 25, false, false, 1);
+	content1.banEditBox = self:CreateEditBox("BOTTOM", content1.addBtn, "TOPLEFT", 55, 48, 170, 25, false, false, 1);
 	-- Edit Box 2 (Category List)
 	content1.catEditBox = self:CreateEditBox("TOP", content1.banEditBox, "RIGHT", 0, 210, 170, 450, false, true, 2);
 	-- Edit Box 3 (Reason List)
@@ -453,14 +461,16 @@ function Config:CreateMenu()
 	--content1.catEasyMenu = self:CreateEasyMenu("TOP", content1.saveBtn, "RIGHT", 0, 140, 130, 25, "Categories:", 1 );
 
 	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt
-	content1.banText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -36, 42, "Insert Character Name");
-	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 174, 42, "Character Name-Realm");
-	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 365, 42, "Category/Reason");
-	content1.authorText = self:CreateTxtInstance("BOTTOM", content1.reaDrop, "BOTTOM", -65, -70, "Created By Xyløns @ Ragnaros US");
+	content1.banText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -36, 70, "Insert Character Name", 1);
+	content1.banTextDesc = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -30, 22, "text format: name-realm", 2);
+	
+	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 174, 70, "Character Name-Realm", 3);
+	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 365, 70, "Category/Reason", 4);
+	content1.authorText = self:CreateTxtInstance("BOTTOM", content1.reaDrop, "BOTTOM", -65, -55, "Created By Xyløns @ Ragnaros US", 5);
 	----------------------------------
 	-- Content2
 	----------------------------------
-	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", -30, 280, "Collaborators");
+	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", -30, 280, "Collaborators", 6);
 	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 15, 385, 25, false, true, 4);
 	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nART/Design by Bexonight @ Ragnaros US \nDevelopment by Xyløns & Heomel @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US");
 	----------------------------------

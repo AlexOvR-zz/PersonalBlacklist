@@ -5,7 +5,7 @@ local addon = LibStub("AceAddon-3.0"):NewAddon("PBL", "AceConsole-3.0")
 local pblLDB = LibStub("LibDataBroker-1.1"):NewDataObject("PBL!", {
 	type = "data source",
 	text = "PBL!",
-	icon = "Interface\\AddOns\\PersonalBlacklist\\media\\pbl_02x256.blp",
+	icon = "Interface\\AddOns\\PersonalBlacklist\\media\\iconMx256.blp",
 	OnClick = function() PBL_MinimapButton_OnClick() end,
 })
 local icon = LibStub("LibDBIcon-1.0")
@@ -31,18 +31,6 @@ function addon:CommandThePBL()
 		icon:Show("PBL!")
 	end
 end
-
-
-
-
-
-LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("PersonalBlacklist", {
-	type = "launcher",
-	icon = "Interface\\AddOns\\PersonalBlacklist\\Media\\Icon2",
-	OnClick = function(PBL_Cont, PBL_MinimapButton)
-		InterfaceOptionsFrame_OpenToFrame(core.Config.UIConfig);
-	end,
-})
 
 --------------------------------------
 -- Custom Slash Command

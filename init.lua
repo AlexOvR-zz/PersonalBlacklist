@@ -1,5 +1,39 @@
-﻿local _, core = ...; -- Namespace
+local _, core = ...; -- Namespace
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1");
+
+local addon = LibStub("AceAddon-3.0"):NewAddon("PBL", "AceConsole-3.0")
+local pblLDB = LibStub("LibDataBroker-1.1"):NewDataObject("PBL!", {
+	type = "data source",
+	text = "PBL!",
+	icon = "Interface\\AddOns\\PersonalBlacklist\\media\\pbl_02x256.blp",
+	OnClick = function() PBL_MinimapButton_OnClick() end,
+})
+local icon = LibStub("LibDBIcon-1.0")
+
+function addon:OnInitialize()
+	-- Obviously you'll need a ## SavedVariables: PBLDB line in your TOC, duh!
+	self.db = LibStub("AceDB-3.0"):New("PBLDB", {
+		profile = {
+			minimap = {
+				hide = false,
+			},
+		},
+	})
+	icon:Register("PBL!", pblLDB, self.db.profile.minimap)
+	self:RegisterChatCommand("PBL", "CommandThePBL")
+end
+
+function addon:CommandThePBL()
+	self.db.profile.minimap.hide = not self.db.profile.minimap.hide
+	if self.db.profile.minimap.hide then
+		icon:Hide("PBL!")
+	else
+		icon:Show("PBL!")
+	end
+end
+
+
+
 
 
 LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("PersonalBlacklist", {
@@ -210,53 +244,7 @@ function has_value (tab, val)
     return false
 end
 							
-	if PBL_["minimap"] == nil then
-		-- If the value is not true/false then set it to true to show initially.
-			PBL_["minimap"] = true
-	end
-
-	if PBL_["minimap"] then
-		-- show minimap
-		PBL_MinimapButton:Show()
-	else
-		PBL_MinimapButton:Hide()
-	end
-
-function Minimap_Toggle()
-	if PBL_["minimap"] then
-		-- minimap is shown, set to false, and hide
-		PBL_["minimap"] = false
-		PBL_MinimapButton:Hide()
-	else
-		-- minimap is now shown, set to true, and show
-		PBL_["minimap"] = true
-		PBL_MinimapButton:Show()
-	end
-end
-
-PBL_Settings = {
-	MinimapPos = 80
-
-}
-
-function PBL_MinimapButton_Reposition()
-	PBL_MinimapButton:SetPoint("TOPLEFT","Minimap","TOPLEFT",52-(80*cos(PBL_Settings.MinimapPos)),(80*sin(PBL_Settings.MinimapPos))-52)
-end
-
-
-function PBL_MinimapButton_DraggingFrame_OnUpdate()
-
-	local xpos,ypos = GetCursorPosition()
-	local xmin,ymin = Minimap:GetLeft(), Minimap:GetBottom()
-
-	xpos = xmin-xpos/UIParent:GetScale()+70
-	ypos = ypos/UIParent:GetScale()-ymin-70
-
-	PBL_Settings.MinimapPos = math.deg(math.atan2(ypos,xpos))
-	PBL_MinimapButton_Reposition();
-end
-
-
+	
 function PBL_MinimapButton_OnClick()
 	 core.commands.show();
 end

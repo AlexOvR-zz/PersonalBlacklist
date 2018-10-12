@@ -1,6 +1,6 @@
 ## Interface: 80000
 ## Title: PersonalBlacklist
-## Author: XylÃ¸ns @ Ragnaros US
+## Author: Xyløns @ Ragnaros US
 ## Version: 1.0
 ## Notes: Tired of Quiters / Flamers and undesired people that join your Mythic+,Guild o Raid group ?
 ## eMail: xylonsUS@gmail.com
@@ -17,8 +17,8 @@
 ## LoadOnDemand: 0
 ## SavedVariables: PBL_
 
-templates.xml
-
 config.lua
 timer.lua
 init.lua
+
+libs\libs.xml

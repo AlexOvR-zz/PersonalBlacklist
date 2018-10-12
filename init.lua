@@ -47,7 +47,6 @@ core.commands = {
 		--core:Print("|cff00cc66/pbl ban|r - add a player to the ban list");
 		--core:Print("|cff00cc66/pbl unban|r - removes a player from the ban list");
 		core:Print("|cff00cc66/pbl banlist|r - show the banlist");
-		core:Print(L["saludo"]);
 		print(" ");
 	end,
 

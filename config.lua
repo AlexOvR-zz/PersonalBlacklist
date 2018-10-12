@@ -424,7 +424,7 @@ function Config:CreateMenu()
 	UIConfig.ScrollFrame.ScrollBar:SetPoint("BOTTOMRIGHT", UIConfig.ScrollFrame, "BOTTOMRIGHT", -7, 18);
 		
 
-	local content1, content2 = SetTabs(UIConfig, 2, "PBL - List", "Credits");
+	local content1, content2 = SetTabs(UIConfig, 2, L["pblListTab"], L["creditsTab"]);
 	
 	----------------------------------
 	-- Content1

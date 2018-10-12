@@ -21,8 +21,8 @@ core.commands = {
 		core:Print("List of slash commands:")
 		core:Print("|cff00cc66/pbl show|r - shows config menu");
 		core:Print("|cff00cc66/pbl help|r - shows help info");
-		core:Print("|cff00cc66/pbl ban|r - add a player to the ban list");
-		core:Print("|cff00cc66/pbl unban|r - removes a player from the ban list");
+		--core:Print("|cff00cc66/pbl ban|r - add a player to the ban list");
+		--core:Print("|cff00cc66/pbl unban|r - removes a player from the ban list");
 		core:Print("|cff00cc66/pbl banlist|r - show the banlist");
 		print(" ");
 	end,
@@ -36,7 +36,7 @@ core.commands = {
 	end;
 
 	['banlist'] = function()
-		--core.Config.removeAddBan(2);
+		core.Config.checkBanList();
 	end;
 
 };

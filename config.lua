@@ -126,7 +126,7 @@ function Config:checkBanList()
 		DEFAULT_CHAT_FRAME:AddMessage(strjoin("|cffffff00", "...", tostring(PBL_.bans.ban_name[i])));
 	end
 	if (bancnt == 0) then
-		DEFAULT_CHAT_FRAME:AddMessage("|cffffff00To ban do /mr ban (Name) or to unban /mr unban (Name).");
+		DEFAULT_CHAT_FRAME:AddMessage("|cffffff00To ban do or unban open the PBL UI with /pbl show");
 	end
 end
 

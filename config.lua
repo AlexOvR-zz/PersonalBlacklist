@@ -413,7 +413,7 @@ function Config:CreateMenu()
 	UIConfig.ScrollFrame.ScrollBar:SetPoint("BOTTOMRIGHT", UIConfig.ScrollFrame, "BOTTOMRIGHT", -7, 18);
 		
 
-	local content1, content2, content3 = SetTabs(UIConfig, 1, "PBL - List", "Tracking", "Profiles");
+	local content1, content2, content3 = SetTabs(UIConfig, 2, "PBL - List", "Credits", "Profiles");
 	
 	----------------------------------
 	-- Content1

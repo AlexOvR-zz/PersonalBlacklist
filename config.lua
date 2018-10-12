@@ -359,7 +359,6 @@ local function SetTabs(frame, numTabs, ...)
 		tab:SetID(i);
 		tab:SetText(select(i, ...));
 		tab:SetScript("OnClick", Tab_OnClick);
-		tab:Hide();
 
 		tab.content = CreateFrame("Frame", 'content'..i, UIConfig.ScrollFrame);
 		tab.content:SetSize(620, 300); --250,500
@@ -413,7 +412,7 @@ function Config:CreateMenu()
 	UIConfig.ScrollFrame.ScrollBar:SetPoint("BOTTOMRIGHT", UIConfig.ScrollFrame, "BOTTOMRIGHT", -7, 18);
 		
 
-	local content1, content2, content3 = SetTabs(UIConfig, 2, "PBL - List", "Credits", "Profiles");
+	local content1, content2 = SetTabs(UIConfig, 2, "PBL - List", "Credits");
 	
 	----------------------------------
 	-- Content1

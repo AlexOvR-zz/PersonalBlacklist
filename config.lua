@@ -461,7 +461,7 @@ function Config:CreateMenu()
 	-- Content2
 	----------------------------------
 	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", -30, 280, "Collaborators");
-	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 20, 370, 25, false, true, 4);
+	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 15, 385, 25, false, true, 4);
 	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nART/Design by Bexonight @ Ragnaros US \nDevelopment by Xyløns & Heomel @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US");
 	----------------------------------
 	-- Content3

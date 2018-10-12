@@ -238,7 +238,7 @@ function Config:CreateDropDownMenu(point, relativeFrame, relativePoint, yOffset,
 						info.checked = false;
 						info.isNotRadio = true;
 						info.notCheckable = true;
-						info.icon =	"Interface\\AddOns\\PersonalBlacklist\\pbl_02x256.blp"					
+						--info.icon =	"Interface\\AddOns\\PersonalBlacklist\\pbl_02x256.blp"					
 						info.menuList, info.hasArrow = i, false;	
 						UIDropDownMenu_AddButton(info);
 						info.func = self.SetValue;							

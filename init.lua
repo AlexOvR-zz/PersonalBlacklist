@@ -1,5 +1,6 @@
 local _, core = ...; -- Namespace
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1");
+local L = LibStub("AceLocale-3.0"):GetLocale("PBL")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("PBL", "AceConsole-3.0")
 local pblLDB = LibStub("LibDataBroker-1.1"):NewDataObject("PBL!", {
@@ -46,6 +47,7 @@ core.commands = {
 		--core:Print("|cff00cc66/pbl ban|r - add a player to the ban list");
 		--core:Print("|cff00cc66/pbl unban|r - removes a player from the ban list");
 		core:Print("|cff00cc66/pbl banlist|r - show the banlist");
+		core:Print(L["saludo"]);
 		print(" ");
 	end,
 

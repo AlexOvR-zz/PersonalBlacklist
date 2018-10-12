@@ -17,6 +17,8 @@
 ## LoadOnDemand: 0
 ## SavedVariables: PBL_
 
+locales\enUS.lua
+locales\esMX.lua
 config.lua
 init.lua
 

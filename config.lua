@@ -174,7 +174,7 @@ end
 
 function Config:CreateTxtInstance(point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont)
 
-	local txtFrame = CreateFrame("Frame", nil, relativeFrame);
+	local txtFrame = CreateFrame("Frame", "txt"..id, relativeFrame);
 		  txtFrame:SetPoint(point, relativeFrame, relativePoint, yOffset, xOffset);	
 		  txtFrame:SetSize(80, 20);
 
@@ -362,14 +362,22 @@ local function SetTabs(frame, numTabs, ...)
 		tab:SetID(i);
 		tab:SetText(select(i, ...));
 		tab:SetScript("OnClick", Tab_OnClick);
-
+	
 		tab.content = CreateFrame("Frame", 'content'..i, UIConfig.ScrollFrame);
-		tab.content:SetSize(620, 300); --250,500
+		tab.content:SetSize(400, 320); --250,500
+		tab.content:SetPoint("RIGHT", -140, 0)
 		tab.content:Hide();
-		
+
+	
 		tab.content.bg = tab.content:CreateTexture(nil, "BACKGROUND");
 		tab.content.bg:SetAllPoints(true);
-		tab.content.bg:SetColorTexture(0,0,0,0.0);
+		tab.content.bg:SetColorTexture(0,0,0,0);
+		
+		--[[if(i == 1)then
+			tab.content.bg:SetColorTexture(0,0,0,0);
+		else
+			tab.content.bg:SetColorTexture(0.3,0.4,0.4,1);
+		end]]
 		
 		table.insert(contents, tab.content);
 		
@@ -387,7 +395,7 @@ end
 
 function Config:CreateMenu()
 	UIConfig = CreateFrame("Frame", "PBL_Config_", UIParent, "UIPanelDialogTemplate");
-	UIConfig:SetSize(620, 300);
+	UIConfig:SetSize(620, 320);
 	UIConfig:SetPoint("TOP"); -- Doesn't need to be ("CENTER", UIParent, "CENTER")
 	UIConfig:RegisterForDrag("LeftButton");
 	UIConfig:SetMovable(true);
@@ -395,7 +403,7 @@ function Config:CreateMenu()
 	UIConfig:RegisterForDrag("LeftButton");
 	UIConfig:SetScript("OnDragStart", UIConfig.StartMoving);
 	UIConfig:SetScript("OnDragStop", UIConfig.StopMovingOrSizing);
-
+	
 	PBL_Config_TitleBG:SetColorTexture(0,0,0,0.7);
     PBL_Config_DialogBG:SetColorTexture(0,0,0,0.7);
 
@@ -405,7 +413,7 @@ function Config:CreateMenu()
 	UIConfig.Title:SetText("Personal Black List                                                               PBL v1.2");	
 	
 	UIConfig.ScrollFrame = CreateFrame("ScrollFrame", nil, UIConfig, "UIPanelScrollFrameTemplate");
-	UIConfig.ScrollFrame:SetPoint("TOPLEFT", PBL_Config_DialogBG, "TOPLEFT", 4, -8);
+	UIConfig.ScrollFrame:SetPoint("TOPLEFT", PBL_Config_DialogBG, "TOPLEFT", 200, -5);
 	UIConfig.ScrollFrame:SetPoint("BOTTOMRIGHT", PBL_Config_DialogBG, "BOTTOMRIGHT", -3, 4);
 	UIConfig.ScrollFrame:SetClipsChildren(true);
 	UIConfig.ScrollFrame:SetScript("OnMouseWheel", ScrollFrame_OnMouseWheel);
@@ -423,38 +431,38 @@ function Config:CreateMenu()
 
 	-- BUTTONS!! -- Para: point, relativeFrame, relativePoint, xOffset, yOffset,  text, id
 	-- Add Button: -- 
-	content1.addBtn = self:CreateButton("CENTER", content1, "TOP", -250, -90, L["addBtn"], 1);  -- TODO: OPtimization Wrap parameters in a table
+	addBtn = self:CreateButton("CENTER", UIConfig, "TOP", -250, -120, L["addBtn"], 1);  -- TODO: OPtimization Wrap parameters in a table
 	-- Remove Button:	
-	content1.rmvBtn = self:CreateButton("TOPLEFT", content1.addBtn, "TOPRIGHT", 15, 0, L["removeBtn"], 2);
+	rmvBtn = self:CreateButton("TOPLEFT", addBtn, "TOPRIGHT", 15, 0, L["removeBtn"], 2);
 
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	-- Edit Box 1: (Ban List) --
-	content1.banEditBox = self:CreateEditBox("BOTTOM", content1.addBtn, "TOPLEFT", 55, 48, 170, 25, false, false, 1);
+	banEditBox = self:CreateEditBox("BOTTOM", addBtn, "TOPLEFT", 55, 48, 170, 25, false, false, 1);
 	-- Edit Box 2 (Category List)
-	content1.catEditBox = self:CreateEditBox("TOP", content1.banEditBox, "RIGHT", 0, 210, 170, 450, false, true, 2);
+	content1.catEditBox = self:CreateEditBox("TOP", content1, "RIGHT", -30, -95, 170, 450, false, true, 2);
 	-- Edit Box 3 (Reason List)
-	content1.reaEditBox = self:CreateEditBox("TOP", content1.catEditBox, "RIGHT", 0, 165, 130, 450, false, true, 3);
+	content1.reaEditBox = self:CreateEditBox("TOP", content1, "RIGHT", -30, 90, 130, 450, false, true, 3);
 
 	-- DROPDOWN MENUS!! -- Para: point, relativeFrame, relativePoint, yOffset, xOffset, width, height, id, txt
 	-- DropDown 1: (Category List) --
-	content1.catDrop = self:CreateDropDownMenu("TOP", content1.addBtn, "BOTTOM", -50, 50, 165, 30, 1, L["dropDownCatTitle"].." ");
+	catDrop = self:CreateDropDownMenu("TOP", addBtn, "BOTTOM", -50, 50, 165, 30, 1, L["dropDownCatTitle"].." ");
 	-- DropDown 2: (Reason List) --
-	content1.reaDrop = self:CreateDropDownMenu("TOP", content1.addBtn, "BOTTOM", -100, 50, 165, 30, 2, L["dropDownReaTitle"].." ");
+	reaDrop = self:CreateDropDownMenu("TOP", addBtn, "BOTTOM", -100, 50, 165, 30, 2, L["dropDownReaTitle"].." ");
 
 	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont
-	content1.banText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -36, 70, L["insertCharTxt"], 1 , "GameFontNormalLarge");
-	content1.banTextDesc = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -30, 22, L["textFormatTxt"], 2, "GameFontDisableSmall");
-	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 174, 70, L["charNameRealmTxt"], 3, "GameFontNormalLarge");
-	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 365, 70, L["catReaTxt"], 4 ,"GameFontNormalLarge");
-	content1.authorText = self:CreateTxtInstance("BOTTOM", content1.reaDrop, "BOTTOM", -65, -55, L["createdByTxt"].." Xyløns @ Ragnaros US", 5 , "QuestFontNormalSmall");
+	banText = self:CreateTxtInstance("TOPLEFT", addBtn, "TOP", -36, 70, L["insertCharTxt"], 1 , "GameFontNormalLarge");
+	banTextDesc = self:CreateTxtInstance("TOPLEFT", addBtn, "TOP", -30, 22, L["textFormatTxt"], 2, "GameFontDisableSmall");
+	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1, "TOP", -175, -8, L["charNameRealmTxt"], 3, "GameFontNormalLarge");
+	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1, "TOP", 30, -8, L["catReaTxt"], 4 ,"GameFontNormalLarge");
+	authorText = self:CreateTxtInstance("BOTTOM", reaDrop, "BOTTOM", -58, -75, L["createdByTxt"].." Xyløns @ Ragnaros US", 5 , "QuestFontNormalSmall");
 	----------------------------------
 	-- Content2
 	----------------------------------
 	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont
-	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", -30, 280, L["collaboratorsTxt"], 6, "GameFontNormalLarge");
+	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", -30, 310, L["collaboratorsTxt"], 6, "GameFontNormalLarge");
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 15, 385, 25, false, true, 4);
-	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nART/Design by Bexonight @ Ragnaros US \nDevelopment by Xyløns & Heomel @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US");
+	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nART/Design by Bexonight @ Ragnaros US \nDevelopment by Xyløns & Heomel @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US\n \nTranslations:\nLeoras-Ragnaros (esMX,esES)");
 
 	populateBanLists();
 	UIConfig:Hide();

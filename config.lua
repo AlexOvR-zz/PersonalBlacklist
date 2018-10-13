@@ -446,7 +446,7 @@ function Config:CreateMenu()
 	content1.banTextDesc = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -30, 22, L["textFormatTxt"], 2, "GameFontDisableSmall");
 	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 174, 70, L["charNameRealmTxt"], 3, "GameFontNormalLarge");
 	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 365, 70, L["catReaTxt"], 4 ,"GameFontNormalLarge");
-	content1.authorText = self:CreateTxtInstance("BOTTOM", content1.reaDrop, "BOTTOM", -65, -55, L["createdByTxt"].." Xyløns @ Ragnaros US", 5 , "GameFontNormalSmall");
+	content1.authorText = self:CreateTxtInstance("BOTTOM", content1.reaDrop, "BOTTOM", -65, -55, L["createdByTxt"].." Xyløns @ Ragnaros US", 5 , "QuestFontNormalSmall");
 	----------------------------------
 	-- Content2
 	----------------------------------

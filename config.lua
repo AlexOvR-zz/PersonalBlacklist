@@ -172,23 +172,15 @@ function Config:CreateCheckbox(point, relativeFrame, relativePoint, yOffset, xOf
 	return checkBox;
 end
 
-function Config:CreateTxtInstance(point, relativeFrame,relativePoint, yOffset, xOffset, txt, id)
+function Config:CreateTxtInstance(point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont)
 
 	local txtFrame = CreateFrame("Frame", nil, relativeFrame);
 		  txtFrame:SetPoint(point, relativeFrame, relativePoint, yOffset, xOffset);	
 		  txtFrame:SetSize(80, 20);
 
-	if(id == 2)then
-      local textInstance = txtFrame:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall");
-	  		textInstance:SetPoint("TOPLEFT", 0, 0);
-		    textInstance:SetText(txt);
-	else
-	  local textInstance = txtFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge");
+	local textInstance = txtFrame:CreateFontString(nil, "ARTWORK", gameFont);
 	  	  	textInstance:SetPoint("TOPLEFT", 0, 0);
 		    textInstance:SetText(txt);
-	end
-	
-
 
 	 return txtFrame;
 
@@ -246,8 +238,7 @@ function Config:CreateDropDownMenu(point, relativeFrame, relativePoint, yOffset,
 						info.text  =  strjoin("|cffffff00", tostring(PBL_.bans.ban_categories[i]));
 						info.checked = false;
 						info.isNotRadio = true;
-						info.notCheckable = true;
-						--info.icon =	"Interface\\AddOns\\PersonalBlacklist\\pbl_02x256.blp"					
+						info.notCheckable = true;			
 						info.menuList, info.hasArrow = i, false;	
 						UIDropDownMenu_AddButton(info);
 						info.func = self.SetValue;							
@@ -436,14 +427,6 @@ function Config:CreateMenu()
 	-- Remove Button:	
 	content1.rmvBtn = self:CreateButton("TOPLEFT", content1.addBtn, "TOPRIGHT", 15, 0, L["removeBtn"], 2);
 
-	-- SLIDERS!! -- Para  point, relativeFrame, relativePoint, yOffset , xOffset, minVal , maxVal, defaultVal, stepVal, id
-	-- Slider 1: --
-	--content1.slider1 = self:CreateSlider("TOP", content1.loadBtn, "BOTTOM", 0, -20, 1, 100, 50, 30, 1);
-
-	-- CHECK BUTTONS!! -- Para: point, relativeFrame, relativePoint, yOffset, xOffset, text, toolTxt, checked, id
-	-- Check Button 1: -- 
-	--content1.checkBtn1 = self:CreateCheckbox("TOP", content1.slider1,"BOTTOM", 0, -20, "My Check Button!","1st Checkbox", true, 1);
-
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	-- Edit Box 1: (Ban List) --
 	content1.banEditBox = self:CreateEditBox("BOTTOM", content1.addBtn, "TOPLEFT", 55, 48, 170, 25, false, false, 1);
@@ -458,25 +441,21 @@ function Config:CreateMenu()
 	-- DropDown 2: (Reason List) --
 	content1.reaDrop = self:CreateDropDownMenu("TOP", content1.addBtn, "BOTTOM", -100, 50, 165, 30, 2, L["dropDownReaTitle"].." ");
 
-	-- Easy Menus!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, txt, id
-	--content1.catEasyMenu = self:CreateEasyMenu("TOP", content1.saveBtn, "RIGHT", 0, 140, 130, 25, "Categories:", 1 );
-
-	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt
-	content1.banText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -36, 70, L["insertCharTxt"], 1);
-	content1.banTextDesc = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -30, 22, L["textFormatTxt"], 2);
-	
-	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 174, 70, L["charNameRealmTxt"], 3);
-	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 365, 70, L["catReaTxt"], 4);
-	content1.authorText = self:CreateTxtInstance("BOTTOM", content1.reaDrop, "BOTTOM", -65, -55, L["createdByTxt"].." Xyløns @ Ragnaros US", 5);
+	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont
+	content1.banText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -36, 70, L["insertCharTxt"], 1 , "GameFontNormalLarge");
+	content1.banTextDesc = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", -30, 22, L["textFormatTxt"], 2, "GameFontDisableSmall");
+	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 174, 70, L["charNameRealmTxt"], 3, "GameFontNormalLarge");
+	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1.addBtn, "TOP", 365, 70, L["catReaTxt"], 4 ,"GameFontNormalLarge");
+	content1.authorText = self:CreateTxtInstance("BOTTOM", content1.reaDrop, "BOTTOM", -65, -55, L["createdByTxt"].." Xyløns @ Ragnaros US", 5 , "GameFontNormalSmall");
 	----------------------------------
 	-- Content2
 	----------------------------------
-	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", -30, 280, L["collaboratorsTxt"], 6);
+	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont
+	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", -30, 280, L["collaboratorsTxt"], 6, "GameFontNormalLarge");
+	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 15, 385, 25, false, true, 4);
 	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nART/Design by Bexonight @ Ragnaros US \nDevelopment by Xyløns & Heomel @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US");
-	----------------------------------
-	-- Content3
-	----------------------------------
+
 	populateBanLists();
 	UIConfig:Hide();
 	return UIConfig;

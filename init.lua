@@ -7,6 +7,11 @@ local pblLDB = LibStub("LibDataBroker-1.1"):NewDataObject("PBL!", {
 	type = "data source",
 	text = "PBL!",
 	icon = "Interface\\AddOns\\PersonalBlacklist\\media\\iconMx256.blp",
+	OnTooltipShow = function(tooltip)
+          tooltip:SetText("Personal BlackList")
+          tooltip:AddLine("(PBL)", 1, 1, 1)
+          tooltip:Show()
+     end,
 	OnClick = function() PBL_MinimapButton_OnClick() end,
 })
 local icon = LibStub("LibDBIcon-1.0")
@@ -221,8 +226,7 @@ local function OnEnterHook(self)
 					name = name.."-"..GetRealmName();
 				end
 
-				if has_value(PBL_.bans.ban_name, strupper(name)) then	
-					DEFAULT_CHAT_FRAME:AddMessage("|cffffff00EasyMenu TEST Applicant ID ");			
+				if has_value(PBL_.bans.ban_name, strupper(name)) then			
 					GameTooltip:AddLine("PBL Blacklisted!",1,0,0,true);
 					GameTooltip:Show();
 				end

@@ -4,7 +4,7 @@ local L = LibStub("AceLocale-3.0"):NewLocale("PBL", "esMX")
 L = L or {}
 L["addBtn"] = "Agregar"
 L["catReaTxt"] = "Categoría/Razón "
-L["charNameRealmTxt"] = "Nombre del Personaje-Reino"
+L["charNameRealmTxt"] = "Personaje-Reino"
 L["collaboratorsTxt"] = "Colaboradores"
 L["commandBanListChat"] = "Mostrar lista de Baneos"
 L["commandShowChat"] = "Mostrar menú de configuración"
@@ -32,8 +32,9 @@ L["dropDownScam"] = "Estafador"
 L["dropDownSpam"] = "Spammer"
 L["dropDownToxic"] = "Toxico"
 L["dropDownWorld"] = "Mundo"
-L["insertCharTxt"] = "Introduzca el Nombre del Personaje"
+L["insertCharTxt"] = "Nombre del Personaje"
 L["pblListTab"] = "Lista PBL"
 L["removeBtn"] = "Remover"
 L["textFormatTxt"] = "Formato de texto: Nombre-Reino"
+
 

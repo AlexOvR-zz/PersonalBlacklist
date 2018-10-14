@@ -17,8 +17,7 @@ local pblLDB = LibStub("LibDataBroker-1.1"):NewDataObject("PBL!", {
 local icon = LibStub("LibDBIcon-1.0")
 
 function addon:OnInitialize()
-	-- Obviously you'll need a ## SavedVariables: PBLDB line in your TOC, duh!
-	self.db = LibStub("AceDB-3.0"):New("PBLDB", {
+	self.db = LibStub("AceDB-3.0"):New("PBL_", {
 		profile = {
 			minimap = {
 				hide = false,

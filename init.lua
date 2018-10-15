@@ -173,8 +173,8 @@ function core:init(event, name)
 
 	StaticPopupDialogs.CONFIRM_LEAVE_IGNORE = {
 		text = "%s",
-		button1 = YES,
-		button2 = NO,
+		button1 = L["confirmYesBtn"],
+		button2 = L["confirmNoBtn"],
 		OnAccept = LeaveParty,
 		whileDead = 1, hideOnEscape = 1, showAlert = 1,
 	}
@@ -203,9 +203,9 @@ function core:init(event, name)
 						text = text..pjs[j].."\n"
 					end
 					if table.getn(pjs) > 1 then
-						text = text.."are on your PBL banned list. Do you want to leave this group?"
+						text = text..L["confirmMultipleTxt"]
 					else
-						text = text.."is on your PBL banned list. Do you want to leave this group?"
+						text = text..L["confirmSingleTxt"]
 					end
 					StaticPopup_Show("CONFIRM_LEAVE_IGNORE", text);
 				end

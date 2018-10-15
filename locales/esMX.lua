@@ -9,6 +9,10 @@ L["collaboratorsTxt"] = "Colaboradores"
 L["commandBanListChat"] = "Mostrar lista de Baneos"
 L["commandShowChat"] = "Mostrar menú de configuración"
 L["commandsListChat"] = "Lista de comandos"
+L["confirmMultipleTxt"] = "estan en tu lista de baneados de PBL. Quieres dejar este grupo ?"
+L["confirmNoBtn"] = "NO"
+L["confirmSingleTxt"] = "esta en tu lista de baneados de PBL. Quieres dejar este grupo ?"
+L["confirmYesBtn"] = "SI"
 L["createdByTxt"] = "Creado por"
 L["creditsTab"] = "Créditos "
 L["dropDownAFK"] = "AFKer"
@@ -36,5 +40,6 @@ L["insertCharTxt"] = "Nombre del Personaje"
 L["pblListTab"] = "Lista PBL"
 L["removeBtn"] = "Remover"
 L["textFormatTxt"] = "Formato de texto: Nombre-Reino"
+
 
 

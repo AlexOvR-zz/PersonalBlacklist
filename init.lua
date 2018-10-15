@@ -6,7 +6,7 @@ local addon = LibStub("AceAddon-3.0"):NewAddon("PBL", "AceConsole-3.0")
 local pblLDB = LibStub("LibDataBroker-1.1"):NewDataObject("PBL!", {
 	type = "data source",
 	text = "PBL!",
-	icon = "Interface\\AddOns\\PersonalBlacklist\\media\\iconMx256.blp",
+	icon = "Interface\\AddOns\\PersonalBlacklist\\media\\newIcon.blp",
 	OnTooltipShow = function(tooltip)
           tooltip:SetText("Personal BlackList")
           tooltip:AddLine("(PBL)", 1, 1, 1)
@@ -172,7 +172,7 @@ function core:init(event, name)
 	};
 
 	StaticPopupDialogs.CONFIRM_LEAVE_IGNORE = {
-		text = "%s is on your PBL banned list. Do you want to leave this group?",
+		text = "%s",
 		button1 = YES,
 		button2 = NO,
 		OnAccept = LeaveParty,
@@ -184,6 +184,7 @@ function core:init(event, name)
 	function f:OnEvent(event)
 		if event == "GROUP_ROSTER_UPDATE" then
 			C_Timer.After(2, function()
+				local pjs = {};
 				for i=1, GetNumGroupMembers() do
 					local name,realm = UnitName("party".. i);
 					if name then
@@ -191,11 +192,24 @@ function core:init(event, name)
 						local fullName = strupper(name.."-"..realm);
 						for j=1, table.getn(PBL_.bans.ban_name) do
 							if PBL_.bans.ban_name[j] == fullName then -- found an ignored player
-								StaticPopup_Show("CONFIRM_LEAVE_IGNORE", fullName);
+								pjs[table.getn(pjs) + 1] = fullName
 							end	
 						end
 					end						
 				end
+				if table.getn(pjs) ~= 0 then
+					text = ""
+					for j=1, table.getn(pjs) do
+						text = text..pjs[j].."\n"
+					end
+					if table.getn(pjs) > 1 then
+						text = text.."are on your PBL banned list. Do you want to leave this group?"
+					else
+						text = text.."is on your PBL banned list. Do you want to leave this group?"
+					end
+					StaticPopup_Show("CONFIRM_LEAVE_IGNORE", text);
+				end
+
 			end)
 		end
 	end

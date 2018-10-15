@@ -185,14 +185,16 @@ function core:init(event, name)
 		if event == "GROUP_ROSTER_UPDATE" then
 			C_Timer.After(2, function()
 				for i=1, GetNumGroupMembers() do
-					local name,realm = UnitName("party".. i);								
-					if (not realm) or (realm == " ") or (realm == "") then realm = GetRealmName(); end
-					local fullName = strupper(name.."-"..realm);
+					local name,realm = UnitName("party".. i);
+					if name then
+						if (not realm) or (realm == " ") or (realm == "") then realm = GetRealmName(); end
+						local fullName = strupper(name.."-"..realm);
 						for j=1, table.getn(PBL_.bans.ban_name) do
 							if PBL_.bans.ban_name[j] == fullName then -- found an ignored player
 								StaticPopup_Show("CONFIRM_LEAVE_IGNORE", fullName);
 							end	
-						end						
+						end
+					end						
 				end
 			end)
 		end
@@ -213,26 +215,6 @@ end)
 
 local hooked = { }
 
-local function OnEnterHook(self)
-	if not self.tooltip then
-			C_Timer.After(1, function()
-
-				local appID = self.applicantID;
-
-				local name = C_LFGList.GetApplicantMemberInfo(appID, 1);
-
-				if not string.match(name, "-") then
-					name = name.."-"..GetRealmName();
-				end
-
-				if has_value(PBL_.bans.ban_name, strupper(name)) then			
-					GameTooltip:AddLine("PBL Blacklisted!",1,0,0,true);
-					GameTooltip:Show();
-				end
-			end,1)
-	end	
-end
-
 local function OnLeaveHook(self)
 		GameTooltip:Hide();
 end
@@ -242,9 +224,27 @@ hooksecurefunc("LFGListApplicationViewer_UpdateResults", function(self)
 	for i = 1, #buttons do
 		local button = buttons[i]
 		if not hooked[button] then
-			button:HookScript("OnEnter", OnEnterHook);
-			button:HookScript("OnLeave", OnLeaveHook);
-			hooked[button] = true;
+			if button.applicantID and button.Members then
+				for j = 1, #button.Members do
+					local b = button.Members[j]
+					if not hooked[b] then
+						hooked[b] = 1
+						b:HookScript("OnEnter", function()
+							local appID = button.applicantID;
+							local name = C_LFGList.GetApplicantMemberInfo(appID, 1);
+							if not string.match(name, "-") then
+								name = name.."-"..GetRealmName();
+							end
+							if has_value(PBL_.bans.ban_name, strupper(name)) then			
+								GameTooltip:AddLine("PBL Blacklisted!",1,0,0,true);
+								GameTooltip:Show();
+							end
+						end
+						)
+						b:HookScript("OnLeave", OnLeaveHook)
+					end
+				end
+			end
 		end
 	end
 end)

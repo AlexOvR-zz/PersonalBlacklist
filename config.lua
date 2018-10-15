@@ -410,7 +410,7 @@ function Config:CreateMenu()
 	UIConfig.Title:ClearAllPoints();
 	UIConfig.Title:SetFontObject("GameFontHighlight");	
 	UIConfig.Title:SetPoint("CENTER", PBL_Config_TitleBG, "CENTER", 6, 1);
-	UIConfig.Title:SetText("Personal Black List                                                               PBL v1.3");	
+	UIConfig.Title:SetText("Personal Black List                                                               PBL v1.4");	
 	
 	UIConfig.ScrollFrame = CreateFrame("ScrollFrame", nil, UIConfig, "UIPanelScrollFrameTemplate");
 	UIConfig.ScrollFrame:SetPoint("TOPLEFT", PBL_Config_DialogBG, "TOPLEFT", 200, -5);

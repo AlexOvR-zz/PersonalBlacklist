@@ -56,7 +56,7 @@ function populateBanLists()
 	editBox2:SetText("");
 	editBox3:SetText("");
 
-		for i=1, table.getn(PBL_.bans.ban_name) do			
+		for i=table.getn(PBL_.bans.ban_name), 1, -1  do			
 			editBox2:Insert(strjoin("|cffffff00",PBL_.bans.ban_name[i].."\n"));			
 			editBox3:Insert(strjoin("|cffffff00",PBL_.bans.ban_category[i].."/"..PBL_.bans.ban_reason[i].."\n"));
 		end

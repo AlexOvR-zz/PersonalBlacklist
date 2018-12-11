@@ -1,7 +1,7 @@
-## Interface: 80000
+## Interface: 80100
 ## Title: PersonalBlacklist
 ## Author: Xyløns @ Ragnaros US
-## Version: 1.0
+## Version: 1.5
 ## Notes: Tired of Quiters / Flamers and undesired people that join your Mythic+,Guild o Raid group ?
 ## eMail: xylonsUS@gmail.com
 ## blacklist: 

@@ -33,9 +33,14 @@ end
 function removeAddBan(action)
 	local tempName = editBox1:GetText();
 		if(action == 2) then
+		--print(tempName)
 			Config:removeBan(tempName);
-		else
+		end
+		if(action == 1) then
 			Config:addBan(tempName);
+		end
+		if(action==4) then
+			Config:AllremoveBan();
 		end
 end
 
@@ -54,12 +59,32 @@ end
 
 function populateBanLists()	
 	editBox2:SetText("");
+	--editBox2:Insert("11111111111")
+	editBox2:SetSize(400,100);
 	editBox3:SetText("");
-
-		for i=table.getn(PBL_.bans.ban_name), 1, -1  do			
-			editBox2:Insert(strjoin("|cffffff00",PBL_.bans.ban_name[i].."\n"));			
-			editBox3:Insert(strjoin("|cffffff00",PBL_.bans.ban_category[i].."/"..PBL_.bans.ban_reason[i].."\n"));
+	local color={[1]="|cffc79c6e",[2]="|cfff58cba",[3]="|cffabd473",[4]="|cfffff569",[5]="|cffffffff",[6]="|cff0070de",[7]="|cff69ccf0",[8]="|cff9482c9",[9]="|cff558a84",[10]="|cffff7d0a",[11]="|cff9900ff",[12]="|cffc41f3b"}
+	local j = 1
+	local numcolor =1;
+	
+	for i=table.getn(PBL_.bans.ban_name), 1, -1  do
+		--print(PBL_.bans.ban_class[i])
+		for j = table.getn(PBL_.bans.ban_clases), 1, -1  do
+			--print(PBL_.bans.ban_class[i],PBL_.bans.ban_clases[j])
+			if PBL_.bans.ban_class[i] == PBL_.bans.ban_clases[j] then
+				numcolor=j
+				--print(numcolor)
+				break
+			end
 		end
+		editBox2:Insert(strjoin("",color[numcolor],"#"..i.." "..PBL_.bans.ban_name[i].."\n"));	
+		--print(i)
+		editBox3:Insert(strjoin("",color[numcolor],PBL_.bans.ban_category[i].."/"..PBL_.bans.ban_class[i].."\n"));
+		--if numcolor == 1 then
+			--numcolor = 5;
+		--else
+			--numcolor = numcolor - 1;
+		--end
+	end
 
 end
 
@@ -79,7 +104,7 @@ function Config:addBan(name)
 			if(tmpCatSelected ~= "") and ( not tmpReaSelected ~= "") then
 				table.insert(PBL_.bans.ban_name,insname);
 				table.insert(PBL_.bans.ban_category,tmpCatSelected);
-				table.insert(PBL_.bans.ban_reason,tmpReaSelected);
+				table.insert(PBL_.bans.ban_class,strupper(tmpReaSelected));
 
 				populateBanLists();
 
@@ -98,6 +123,16 @@ end
 function Config:removeBan(name)
 	local tempCat = tmpCatSelected;
 	local tempRea = tmpReaSelected;
+	--print("3",name)
+	--local numb = tonumber(name);
+	if not string.match(name,"-") then
+		--print("2",name)
+		table.remove(PBL_.bans.ban_name, name);
+		table.remove(PBL_.bans.ban_category, name);
+		table.remove(PBL_.bans.ban_class, name);	
+		populateBanLists();
+	end
+	--print ("1",name)
 	local charname, realmname = strsplit("-",name);
 	local fullcharname = charname .."-".. realmname;
 	local insname = strupper(fullcharname);
@@ -107,7 +142,7 @@ function Config:removeBan(name)
 
 				table.remove(PBL_.bans.ban_name, i);
 				table.remove(PBL_.bans.ban_category, i);
-				table.remove(PBL_.bans.ban_reason, i);	
+				table.remove(PBL_.bans.ban_class, i);	
 
 				populateBanLists();
 				DEFAULT_CHAT_FRAME:AddMessage("|cffffff00"..insname.." removed from PBL ban list successfully.");
@@ -117,6 +152,19 @@ function Config:removeBan(name)
 	else
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffff00Error: No name provided.");
 	end
+end
+
+function Config:AllremoveBan()
+local j = table.getn(PBL_.bans.ban_name)+1;
+	for i=0, j do
+		print("|cffffff00"..PBL_.bans.ban_name[table.getn(PBL_.bans.ban_name)].." removed from PBL ban list successfully.");
+				table.remove(PBL_.bans.ban_name, table.getn(PBL_.bans.ban_name));
+				table.remove(PBL_.bans.ban_category, table.getn(PBL_.bans.ban_name));
+				table.remove(PBL_.bans.ban_class, table.getn(PBL_.bans.ban_name));	
+				populateBanLists();
+				--DEFAULT_CHAT_FRAME:AddMessage("|cffffff00"..insname.." removed from PBL ban list successfully.");	
+	end
+	return;
 end
 
 function Config:checkBanList()
@@ -175,12 +223,17 @@ end
 function Config:CreateTxtInstance(point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont)
 
 	local txtFrame = CreateFrame("Frame", "txt"..id, relativeFrame);
-		  txtFrame:SetPoint(point, relativeFrame, relativePoint, yOffset, xOffset);	
-		  txtFrame:SetSize(80, 20);
+		  txtFrame:SetPoint(point, relativeFrame, relativePoint, yOffset, xOffset);
+		--if id == 3 then
+			txtFrame:SetSize(80, 20);
+		--end
+		--if id==4 then
+			--txtFrame:SetSize(60, 20);
+		--end
 
 	local textInstance = txtFrame:CreateFontString(nil, "ARTWORK", gameFont);
-	  	  	textInstance:SetPoint("TOPLEFT", 0, 0);
-		    textInstance:SetText(txt);
+	 	  	textInstance:SetPoint("TOPLEFT", 0, 0);
+			textInstance:SetText(txt);
 
 	 return txtFrame;
 
@@ -211,7 +264,7 @@ function Config:CreateEditBox(point, relativeFrame, relativePoint, yOffset, xOff
 	editBox:SetPoint(point, xOffset, yOffset)
 	editBox:SetMultiLine(multiline);
 	editBox:SetCursorPosition(0);	
-	editBox:SetFont("Fonts\\FRIZQT__.TTF", 12);
+	editBox:SetFont("Fonts\\ARIALN.TTF", 12);
 	editBox:SetJustifyV("CENTER");
 	editBox:SetScript("OnEscapePressed", function(self)
 			Config:Toggle();
@@ -245,9 +298,9 @@ function Config:CreateDropDownMenu(point, relativeFrame, relativePoint, yOffset,
 				end			
 			end
 		if(id == 2)then
-				for i=1, table.getn(PBL_.bans.ban_reasons) do			
+				for i=1, table.getn(PBL_.bans.ban_clases) do			
 						info.isTitle = false;
-						info.text  =  strjoin("|cffffff00", tostring(PBL_.bans.ban_reasons[i]));
+						info.text  =  strjoin("|cffffff00", tostring(PBL_.bans.ban_clases[i]));
 						info.checked = false;
 						info.isNotRadio = true;
 						info.notCheckable = true;
@@ -434,6 +487,8 @@ function Config:CreateMenu()
 	addBtn = self:CreateButton("CENTER", UIConfig, "TOP", -250, -120, L["addBtn"], 1);  -- TODO: OPtimization Wrap parameters in a table
 	-- Remove Button:	
 	rmvBtn = self:CreateButton("TOPLEFT", addBtn, "TOPRIGHT", 15, 0, L["removeBtn"], 2);
+	-- All Remove
+	allrem = self:CreateButton("TOPLEFT", addBtn,"TOPRIGHT",15,-30,"AllRemove",4);
 
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	-- Edit Box 1: (Ban List) --
@@ -447,7 +502,7 @@ function Config:CreateMenu()
 	-- DropDown 1: (Category List) --
 	catDrop = self:CreateDropDownMenu("TOP", addBtn, "BOTTOM", -50, 50, 165, 30, 1, L["dropDownCatTitle"].." ");
 	-- DropDown 2: (Reason List) --
-	reaDrop = self:CreateDropDownMenu("TOP", addBtn, "BOTTOM", -100, 50, 165, 30, 2, L["dropDownReaTitle"].." ");
+	reaDrop = self:CreateDropDownMenu("TOP", addBtn, "BOTTOM", -100, 50, 165, 30, 2, L["dropDownClassTitle"].." ");
 
 	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont
 	banText = self:CreateTxtInstance("TOPLEFT", addBtn, "TOP", -36, 70, L["insertCharTxt"], 1 , "GameFontNormalLarge");
@@ -463,7 +518,12 @@ function Config:CreateMenu()
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 15, 385, 25, false, true, 4);
 	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nART/Design by Bexonight @ Ragnaros US \nDevelopment by Xyløns & Heomel @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US\n \nTranslations:\nLeoras-Ragnaros (esMX,esES)");
-
+	----------------------------------
+	-- Content3
+	----------------------------------
+	--content3.paraText = self:CreateTxtInstance("TOP", content3, "BOTTOM", -30, 310, "Parametrs", 7, "GameFontNormalLarge");
+	--content3.paraCheck = self:CreateCheckBox(true)
+	
 	populateBanLists();
 	UIConfig:Hide();
 	return UIConfig;

@@ -3,7 +3,7 @@ local L = LibStub("AceLocale-3.0"):NewLocale("PBL", "enUS", true)
 
 L = L or {}
 L["addBtn"] = "Add"
-L["catReaTxt"] = "Category/Reason"
+L["catReaTxt"] = "Category/Class" -- reason changed to class
 L["charNameRealmTxt"] = "Character Name-Realm"
 L["collaboratorsTxt"] = "Collaborators"
 L["commandBanListChat"] = "show the banlist"
@@ -23,6 +23,7 @@ L["dropDownBadPlayer"] = "Bad Player"
 L["dropDownBadTank"] = "Bad Tank"
 L["dropDownCat"] = "Categories"
 L["dropDownCatTitle"] = "Category"
+L["dropDownClassTitle"] = "Clases" -- new position
 L["dropDownGuild"] = "Guild"
 L["dropDownMythic"] = "Mythics+"
 L["dropDownNinja"] = "Ninja"

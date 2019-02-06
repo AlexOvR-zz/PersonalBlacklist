@@ -1,3 +1,6 @@
+-------------------
+-- Block #1 Not chaged
+-------------------
 local _, core = ...; -- Namespace
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1");
 local L = LibStub("AceLocale-3.0"):GetLocale("PBL")
@@ -119,13 +122,19 @@ function core:init(event, name)
 		_G["ChatFrame"..i.."EditBox"]:SetAltArrowKeyMode(false);
 	end
 	
+
 	----------------------------------
 	-- Register Slash Commands!
 	----------------------------------
 
 	SLASH_PersonalBlacklist1 = "/pbl";
 	SlashCmdList.PersonalBlacklist = HandleSlashCommands;
-
+---------------------
+-- End block #1
+---------------------
+-----------------------
+-- Block #2 delited reason and add class
+------------------------
 	if(not PBL_) then
 		PBL_ = {
 			bans = {
@@ -146,6 +155,7 @@ function core:init(event, name)
 	if(not PBL_.bans.ban_categories) then PBL_.bans.ban_categories = { }; end
 	if(not PBL_.bans.ban_clases) then PBL_.bans.ban_clases = { }; end
 
+
 	PBL_.bans.ban_categories = {
 		L["dropDownCat"],
 		L["dropDownAll"],
@@ -155,6 +165,7 @@ function core:init(event, name)
 		L["dropDownPvP"],
 		L["dropDownWorld"]
 	};
+	-- there was reason, now it is class
 	PBL_.bans.ban_clases = {
 		"WARRIOR",
 		"PALADIN",
@@ -177,7 +188,13 @@ function core:init(event, name)
 		OnAccept = LeaveParty,
 		whileDead = 1, hideOnEscape = 1, showAlert = 1,
 	}
-
+	-----------------------
+	-- End block #2
+	----------------------
+-------------------
+-- Block #3 big rework function
+-------------------
+--this two variables for wow menu with add on parametrs
 	local defaultBL =
 	{
 		LeaveAllert = false,
@@ -189,36 +206,34 @@ function core:init(event, name)
 
 	local f = CreateFrame("Frame");
 
-	local was = "";
+	local was = ""; -- variable for single print name of one bad guy
 	function f:OnEvent(event)
 		if event == "GROUP_ROSTER_UPDATE" then
 			C_Timer.After(2, function()
 				local pjs = {};
 				local fullName="";
 				local name,realm="";
-				for i=1, GetNumGroupMembers() do
-					if GetNumGroupMembers() < 6 then
+				for i=1, GetNumGroupMembers() do 
+					if GetNumGroupMembers() < 6 then --find out user in party or raid
 						name,realm = UnitName("party".. i)
-						--print("party=",i,"name=",name,"server=",realm)
 					else
 						name,realm = UnitName("raid".. i)
-						--print("raid=",i,"name=",name,"server=",realm)
 					end
 					if name then
-						if (not realm) or (realm == " ") or (realm == "") then realm = GetRealmName(); realm=realm:gsub(" ",""); end
+						if (not realm) or (realm == " ") or (realm == "") then realm = GetRealmName(); realm=realm:gsub(" ",""); end--delete space symbol in realm name
 						local fullName = strupper(name.."-"..realm);
 						for j=1, table.getn(PBL_.bans.ban_name) do
 							if PBL_.bans.ban_name[j] == fullName then -- found an ignored player
 								pjs[table.getn(pjs) + 1] = fullName
-								if was ~= fullName then
-									print("|cffff0000".."Here is",fullName,"who is in your BlackList")
+								if was ~= fullName then -- check was the bad guy printed
+									print("|cffff0000".."Here is",fullName,"who is in your BlackList")--write message that bad guy in your party
 									was = fullName;
 								end
 							end	
 						end
 					end						
 				end
-				if PBL_.BL_SavedVariables[indexBL[1]] == false then
+				if PBL_.BL_SavedVariables[indexBL[1]] == false then -- check parametr from wow menu
 					if table.getn(pjs) ~= 0 then
 						text = ""
 						for j=1, table.getn(pjs) do
@@ -236,14 +251,19 @@ function core:init(event, name)
 			end)
 		end
 	end
-
+------------------
+--End block #3
+-------------------
+------------------
+-- Block #4 just small fixes
+------------------
 	GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		local name, unit = self:GetUnit()
 		if UnitIsPlayer(unit) and not UnitIsUnit(unit, "player") and not UnitIsUnit(unit, "party") then
 			local name, realm = UnitName(unit)
 			if realm == nil then
 				realm=GetRealmName()
-				realm=realm:gsub(" ","");
+				realm=realm:gsub(" ",""); -- delete space symbol from server name
 			end
 			name = name .. "-" .. realm;
 			if has_value(PBL_.bans.ban_name, strupper(name)) then
@@ -273,7 +293,7 @@ function core:init(event, name)
 								local name = C_LFGList.GetApplicantMemberInfo(appID, 1);
 								if not string.match(name, "-") then
 									local realm = GetRealmName();
-									realm=realm:gsub(" ","");
+									realm=realm:gsub(" ",""); -- delete space symbol from server name
 									name = name.."-"..realm;
 								end
 								if has_value(PBL_.bans.ban_name, strupper(name)) then			
@@ -289,15 +309,20 @@ function core:init(event, name)
 		end
 	end)
 -----------------
---
+-- End block #4
 -----------------
+-----------------
+-- Block #5 PopUp menu give PBL bane
+------------------
+-- Create frame
 local PopUpBan = CreateFrame("Frame","PopUpBanFrame")
 PopUpBan:SetScript("OnEvent", function() hooksecurefunc("UnitPopup_OnClick", AddToBan) end)
 PopUpBan:RegisterEvent("PLAYER_LOGIN")
 local PopupUnits = {}
-UnitPopupButtons["GiveABan"] = { text = "Give a ban", }
+UnitPopupButtons["GiveABan"] = { text = "Give PBL Ban", } -- name of button
 table.insert( UnitPopupMenus["SELF"] ,1 , "GiveABan" )
 
+-- Place button to popup menu after "whisper"
 for i,UPMenus in pairs(UnitPopupMenus) do
   for j=1, #UPMenus do
     if UPMenus[j] == "WHISPER" then
@@ -309,6 +334,7 @@ for i,UPMenus in pairs(UnitPopupMenus) do
   end
 end
 
+-- Function from config.lua but have some changes
 function AddToBan (self)
  local button = self.value;
  if ( button == "GiveABan" ) then
@@ -318,29 +344,24 @@ function AddToBan (self)
   local server = "";
   server = dropdownFrame.server;
   local className,classFile,classID = UnitClass(unit);
-  --print ("name=",name,"server=",server);
 	if server==nil or server=="" then
 		local realm = GetRealmName();
 		server=realm:gsub(" ","");
-		--print("server=",server);
 	end
    local fullname = name.."-"..server;
-   --print("fullname=",fullname)
   if (fullname ~= nil or fullname ~= "") then
 		local banexist = 0;
 		for i=1, table.getn(PBL_.bans.ban_name) do
-			--print("banname=",PBL_.bans.ban_name[i])
-			if PBL_.bans.ban_name[i] == strupper(fullname) then
+			if PBL_.bans.ban_name[i] == strupper(fullname) then -- if bad guy in ypur list, this function remove him
 				table.remove(PBL_.bans.ban_name, i);
 				table.remove(PBL_.bans.ban_category, i);
 				table.remove(PBL_.bans.ban_class, i);
 				populateBanLists();
 				print("|cffff0000"..fullname.."remove from BlackList")
-				--DEFAULT_CHAT_FRAME:AddMessage("|cffffff00Unable to add "..fullname.." to the ban list - the user is already banned.");
 				banexist = 1;
 			end
 		end
-		if (banexist == 0) then	
+		if (banexist == 0) then	-- if he didn't in ban, he add in ban list
 			
 				table.insert(PBL_.bans.ban_name,strupper(fullname));
 				table.insert(PBL_.bans.ban_category,"PopUp");
@@ -348,8 +369,6 @@ function AddToBan (self)
 
 				populateBanLists();
 				print("|cffff0000"..fullname.." Succesfully Banned for PBL!")
-				--local string3 = strjoin("",fullname," Succesfully Banned for PBL!");
-				--DEFAULT_CHAT_FRAME:AddMessage(strjoin("|cffffff00", string3));
 		end
 	else
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffff00Error: No name provided.");
@@ -357,21 +376,23 @@ function AddToBan (self)
  end
 end
 --------------------
----
+--- End block #5
 --------------------
-
+--------------------
+--------------------
+-- Block #6 WoW add on menu, now it have one parametr, but it is easy to add another one
+----------------------
+--create new position in saved variable
 if PBL_.BL_SavedVariables == nil then
-	--print(defaultBL)
 	PBL_.BL_SavedVariables = defaultBL;
 else
-	--print("2")
 	for key, value in pairs(defaultBL) do
 		if PBL_.BL_SavedVariables[key] == nil then
 			PBL_.BL_SavedVariables[key] = value
 		end
 	end
 end
-
+-- create new frame
 BL = {}
 BL.panel = CreateFrame("Frame", "BL_Panel", UIParent)
 BL.panel.name = "Black list"
@@ -379,13 +400,10 @@ InterfaceOptions_AddCategory (BL.panel)
 
 local buttonList = {}
 
-function createCheckButton(i, x, y)
-	local list = 
+function createCheckButton(i, x, y) -- function create checkbox
+	local list =  -- new row, new name for parametr 
 	{
 		" Leave Allert",
-		" Disable double click targeting in combat",
-		" Disable right click targeting out of combat",
-		" Disable double click targeting out of combat",
 	}
 	local checkButton = CreateFrame("CheckButton", "BL_CheckButton" .. i, BL.panel, "UICheckButtonTemplate")
 	buttonList[i] = checkButton
@@ -396,42 +414,23 @@ function createCheckButton(i, x, y)
 	_G[checkButton:GetName() .. "Text"]:SetFont(GameFontNormal:GetFont(), 14, "NONE")
 	buttonList[i]:SetScript("OnClick", function()
 		if buttonList[i]:GetChecked() then
-			--print("get1",i,PBL_.BL_SavedVariables[indexBL[i]])
 			PBL_.BL_SavedVariables[indexBL[i]] = false
 		else
-			--print("get2",i,PBL_.BL_SavedVariables[indexBL[i]])
 			PBL_.BL_SavedVariables[indexBL[i]] = true
 		end
-		--print("ss",i)
 		setupButtons()
 	end)
 end
 
-createCheckButton(1, 1, 1)
---createCheckButton(2, 1, 2)
---createCheckButton(3, 1, 3)
---createCheckButton(4, 1, 4)
+createCheckButton(1, 1, 1) -- create checkbox (id,xset,yset)
 
-function setupButtons()
+function setupButtons() -- update check box from saved variable
 	for i = 1, #buttonList do
-		--print("set1",i)
-		--if i % 2 == 1 then
-			-- if PBL_.BL_SavedVariables[indexBL[i]] then
-			-- 	buttonList[i]:SetChecked(false)
-			-- 	buttonList[i + 1]:SetAlpha(.5)
-			-- 	buttonList[i + 1]:Disable()
-			-- else
-			-- 	buttonList[i]:SetChecked(true)
-			-- 	buttonList[i + 1]:SetAlpha(1)
-			-- 	buttonList[i + 1]:Enable()
-			-- end
-		--else
 			if PBL_.BL_SavedVariables[indexBL[i]] then
 				buttonList[i]:SetChecked(false)
 			else
 				buttonList[i]:SetChecked(true)
 			end
-		--end
 	end
 end
 
@@ -439,7 +438,10 @@ local func1 = CreateFrame("Frame")
 func1:RegisterEvent("ADDON_LOADED")
 func1:SetScript("OnEvent", setupButtons)
 -----------------------
----
+--- End block #6
+-----------------------
+-----------------------
+-- Block #7 Not chaged
 -----------------------
 function has_value (tab, val)
     for indexBL, value in ipairs(tab) do
@@ -464,3 +466,6 @@ end
 local events = CreateFrame("Frame");
 events:RegisterEvent("ADDON_LOADED");
 events:SetScript("OnEvent", core.init);
+----------------
+-- End block #7
+----------------

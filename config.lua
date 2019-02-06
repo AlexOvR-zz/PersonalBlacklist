@@ -1,5 +1,7 @@
-﻿--------------------------------------
--- Namespaces
+﻿-------------------------------------
+---- Not changed block #1
+--------------------------------------
+-- Namespaces 
 --------------------------------------
 local _, core = ...;
 core.Config = {}; -- adds Config table to addon namespace
@@ -11,7 +13,7 @@ tmpCatSelected = "";
 tmpReaSelected = "";
 
 --------------------------------------
--- Defaults (usually a database!)
+-- Defaults (usually a database!) 
 --------------------------------------
 local defaults = {
 	theme = {
@@ -21,11 +23,16 @@ local defaults = {
 		hex = "00ccff"
 	}
 }
-
+----------------------
+--- End block #1
+----------------------
+----------------------
+-- Not changed block #2
+----------------------
 --------------------------------------
 -- Config functions
 --------------------------------------
-function Config:Toggle()
+function Config:Toggle() 
 	local menu = UIConfig or Config:CreateMenu();
 	menu:SetShown(not menu:IsShown());
 end
@@ -56,38 +63,39 @@ function btnClickEvents(id)
 		removeAddBan(id);
 	end
 end
-
+----------------------------
+-- End block #2
+----------------------------
+----------------------------
+-- Block #3 have small changes -- changed everywhere PBL_.bans.ban_reasons and ban_reason to ban_clases and ban_class
+----------------------------
 function populateBanLists()	
 	editBox2:SetText("");
-	--editBox2:Insert("11111111111")
-	editBox2:SetSize(400,100);
+	editBox2:SetSize(400,100); -- Need bigger width to display large names
 	editBox3:SetText("");
+	-- Color setup for all 12 clases
 	local color={[1]="|cffc79c6e",[2]="|cfff58cba",[3]="|cffabd473",[4]="|cfffff569",[5]="|cffffffff",[6]="|cff0070de",[7]="|cff69ccf0",[8]="|cff9482c9",[9]="|cff558a84",[10]="|cffff7d0a",[11]="|cff9900ff",[12]="|cffc41f3b"}
 	local j = 1
 	local numcolor =1;
 	
 	for i=table.getn(PBL_.bans.ban_name), 1, -1  do
-		--print(PBL_.bans.ban_class[i])
 		for j = table.getn(PBL_.bans.ban_clases), 1, -1  do
-			--print(PBL_.bans.ban_class[i],PBL_.bans.ban_clases[j])
-			if PBL_.bans.ban_class[i] == PBL_.bans.ban_clases[j] then
+			if PBL_.bans.ban_class[i] == PBL_.bans.ban_clases[j] then -- Compare bad guys class with clases in table to choose color
 				numcolor=j
-				--print(numcolor)
 				break
 			end
 		end
-		editBox2:Insert(strjoin("",color[numcolor],"#"..i.." "..PBL_.bans.ban_name[i].."\n"));	
-		--print(i)
+		editBox2:Insert(strjoin("",color[numcolor],"#"..i.." "..PBL_.bans.ban_name[i].."\n")); -- add #nuber of row in list to easy remove them by number
 		editBox3:Insert(strjoin("",color[numcolor],PBL_.bans.ban_category[i].."/"..PBL_.bans.ban_class[i].."\n"));
-		--if numcolor == 1 then
-			--numcolor = 5;
-		--else
-			--numcolor = numcolor - 1;
-		--end
 	end
 
 end
-
+---------------------------------
+-- End block #3
+---------------------------------
+----------------------------
+-- Block #4 changed only table -- changed everywhere PBL_.bans.ban_reasons and ban_reason to ban_clases and ban_class
+----------------------------
 function Config:addBan(name)
 	local charname, realmname = strsplit("-",name);
 	local fullcharname = charname .."-".. realmname; -- Full Char Name included Realm and - symbol
@@ -119,20 +127,21 @@ function Config:addBan(name)
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffff00Error: No name provided.");
 	end
 end
-
+---------------
+-- End block #4
+---------------
+-----------------------------
+-- Block #5 name of table changed (reason to class) and have new function
+-----------------------------
 function Config:removeBan(name)
 	local tempCat = tmpCatSelected;
 	local tempRea = tmpReaSelected;
-	--print("3",name)
-	--local numb = tonumber(name);
-	if not string.match(name,"-") then
-		--print("2",name)
+	if not string.match(name,"-") then -- find out that it is a number
 		table.remove(PBL_.bans.ban_name, name);
 		table.remove(PBL_.bans.ban_category, name);
 		table.remove(PBL_.bans.ban_class, name);	
 		populateBanLists();
 	end
-	--print ("1",name)
 	local charname, realmname = strsplit("-",name);
 	local fullcharname = charname .."-".. realmname;
 	local insname = strupper(fullcharname);
@@ -153,7 +162,12 @@ function Config:removeBan(name)
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffff00Error: No name provided.");
 	end
 end
-
+---------------------
+-- End block #5
+---------------------
+---------------------
+-- Block #6 two useless function in this time, but maybe it will be usefull in future (changed: reason to class)
+---------------------
 function Config:AllremoveBan()
 local j = table.getn(PBL_.bans.ban_name)+1;
 	for i=0, j do
@@ -162,14 +176,12 @@ local j = table.getn(PBL_.bans.ban_name)+1;
 				table.remove(PBL_.bans.ban_category, table.getn(PBL_.bans.ban_name));
 				table.remove(PBL_.bans.ban_class, table.getn(PBL_.bans.ban_name));	
 				populateBanLists();
-				--DEFAULT_CHAT_FRAME:AddMessage("|cffffff00"..insname.." removed from PBL ban list successfully.");	
 	end
 	return;
 end
 
 function Config:checkBanList()
 	local bancnt = 0;
-	--Print("", "", "|cffffff00To ban do /mr ban (Name) or to unban /mr unban (Name) - The Current Bans:");
 	for i=1, table.getn(PBL_.bans.ban_name) do
 		bancnt = 1;
 		DEFAULT_CHAT_FRAME:AddMessage(strjoin("|cffffff00", "...", tostring(PBL_.bans.ban_name[i])));
@@ -178,7 +190,12 @@ function Config:checkBanList()
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffff00To ban do or unban open the PBL UI with /pbl show");
 	end
 end
-
+-----------------------
+-- End block #6
+-----------------------
+-----------------------
+-- Block #7 Not changed except 1 new button (allrem)
+-----------------------
 function Config:CreateButton(point, relativeFrame, relativePoint, xOffset, yOffset, text, id)
 	local btn = CreateFrame("Button", "btn"..id, relativeFrame, "GameMenuButtonTemplate");
 	btn:SetBackdrop({
@@ -224,12 +241,7 @@ function Config:CreateTxtInstance(point, relativeFrame,relativePoint, yOffset, x
 
 	local txtFrame = CreateFrame("Frame", "txt"..id, relativeFrame);
 		  txtFrame:SetPoint(point, relativeFrame, relativePoint, yOffset, xOffset);
-		--if id == 3 then
 			txtFrame:SetSize(80, 20);
-		--end
-		--if id==4 then
-			--txtFrame:SetSize(60, 20);
-		--end
 
 	local textInstance = txtFrame:CreateFontString(nil, "ARTWORK", gameFont);
 	 	  	textInstance:SetPoint("TOPLEFT", 0, 0);
@@ -488,7 +500,7 @@ function Config:CreateMenu()
 	-- Remove Button:	
 	rmvBtn = self:CreateButton("TOPLEFT", addBtn, "TOPRIGHT", 15, 0, L["removeBtn"], 2);
 	-- All Remove
-	allrem = self:CreateButton("TOPLEFT", addBtn,"TOPRIGHT",15,-30,"AllRemove",4);
+	allrem = self:CreateButton("TOPLEFT", addBtn,"TOPRIGHT",15,-30,"AllRemove",4); -- need new button to create allremoave function
 
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	-- Edit Box 1: (Ban List) --
@@ -528,3 +540,6 @@ function Config:CreateMenu()
 	UIConfig:Hide();
 	return UIConfig;
 end
+----------
+-- End block #7
+----------

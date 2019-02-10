@@ -9,6 +9,7 @@ local Config = core.Config;
 local UIConfig;
 tmpCatSelected = "";
 tmpReaSelected = "";
+tmpClaSelected = "";
 
 --------------------------------------
 -- Defaults (usually a database!)
@@ -52,13 +53,27 @@ function btnClickEvents(id)
 	end
 end
 
-function populateBanLists()	
+function Config:populateBanLists()	
 	editBox2:SetText("");
 	editBox3:SetText("");
+	editBox4:SetText("");
+	local color={[0]="|cff9d9d9d",[1]="|cffc79c6e",[2]="|cfff58cba",[3]="|cffabd473",[4]="|cfffff569",[5]="|cffffffff",[6]="|cff0070de",[7]="|cff69ccf0",[8]="|cff9482c9",[9]="|cff558a84",[10]="|cffff7d0a",[11]="|cff9900ff",[12]="|cffc41f3b"}
+	local j = 1
+	local numcolor = 0;
 
-		for i=table.getn(PBL_.bans.ban_name), 1, -1  do			
-			editBox2:Insert(strjoin("|cffffff00",PBL_.bans.ban_name[i].."\n"));			
-			editBox3:Insert(strjoin("|cffffff00",PBL_.bans.ban_category[i].."/"..PBL_.bans.ban_reason[i].."\n"));
+		for i=table.getn(PBL_.bans.ban_name), 1, -1  do		
+			for j = table.getn(PBL_.bans.ban_clases), 1, -1  do
+				--print(PBL_.bans.ban_class[i],PBL_.bans.ban_clases[j])
+				if PBL_.bans.ban_class[i] == PBL_.bans.ban_clases[j] then
+					    numcolor=j-1;
+					--print(numcolor)
+					break
+				end
+			end	
+			editBox2:Insert(strjoin("",color[numcolor],"#"..i.." "..PBL_.bans.ban_name[i].."\n"));
+			editBox4:Insert(strjoin("",color[numcolor],PBL_.bans.ban_class[i].."\n"));		
+			editBox3:Insert(strjoin("",color[numcolor],PBL_.bans.ban_category[i].."/"..PBL_.bans.ban_reason[i].."\n"));
+			numcolor = 0;
 		end
 
 end
@@ -75,13 +90,16 @@ function Config:addBan(name)
 				banexist = 1;
 			end
 		end
-		if (banexist == 0) and (tmpCatSelected ~= nil) and (tmpReaSelected ~= nil) then	
-			if(tmpCatSelected ~= "") and ( not tmpReaSelected ~= "") then
+		if (banexist == 0) and (tmpCatSelected ~= nil) and (tmpReaSelected ~= nil) and (tmpClaSelected ~= nil) then	
+			if(tmpCatSelected ~= "") and ( not tmpReaSelected ~= "") and ( not tmpClaSelected ~= "")  then
+
 				table.insert(PBL_.bans.ban_name,insname);
 				table.insert(PBL_.bans.ban_category,tmpCatSelected);
 				table.insert(PBL_.bans.ban_reason,tmpReaSelected);
+				print(tmpClaSelected);
+				table.insert(PBL_.bans.ban_class,tmpClaSelected);
 
-				populateBanLists();
+				Config:populateBanLists();
 
 				local string3 = strjoin("",insname," Succesfully Banned for PBL!");
 				DEFAULT_CHAT_FRAME:AddMessage(strjoin("|cffffff00", string3));
@@ -98,6 +116,7 @@ end
 function Config:removeBan(name)
 	local tempCat = tmpCatSelected;
 	local tempRea = tmpReaSelected;
+	local tempCla = tmpClaSelected;
 	local charname, realmname = strsplit("-",name);
 	local fullcharname = charname .."-".. realmname;
 	local insname = strupper(fullcharname);
@@ -107,9 +126,10 @@ function Config:removeBan(name)
 
 				table.remove(PBL_.bans.ban_name, i);
 				table.remove(PBL_.bans.ban_category, i);
-				table.remove(PBL_.bans.ban_reason, i);	
+				table.remove(PBL_.bans.ban_reason, i);
+				table.remove(PBL_.bans.ban_class, i);	
 
-				populateBanLists();
+				Config:populateBanLists();
 				DEFAULT_CHAT_FRAME:AddMessage("|cffffff00"..insname.." removed from PBL ban list successfully.");
 				return;
 			end
@@ -205,13 +225,16 @@ function Config:CreateEditBox(point, relativeFrame, relativePoint, yOffset, xOff
 		editBox:EnableKeyboard(false);
 		editBox:SetJustifyH("CENTER");
 	end
+	if(id == 2)then
+		editBox:SetJustifyH("LEFT");
+	end
 	editBox:SetFrameStrata("DIALOG")
 	editBox:SetSize(width,height);
 	editBox:SetAutoFocus(autoFocus)
 	editBox:SetPoint(point, xOffset, yOffset)
 	editBox:SetMultiLine(multiline);
 	editBox:SetCursorPosition(0);	
-	editBox:SetFont("Fonts\\FRIZQT__.TTF", 12);
+	editBox:SetFont("Fonts\\ARIALN.TTF", 12);
 	editBox:SetJustifyV("CENTER");
 	editBox:SetScript("OnEscapePressed", function(self)
 			Config:Toggle();
@@ -256,7 +279,18 @@ function Config:CreateDropDownMenu(point, relativeFrame, relativePoint, yOffset,
 						info.func = self.SetValue;				
 				end	
 			end			
-
+		if(id == 3)then
+			for i=1, table.getn(PBL_.bans.ban_clases) do			
+					info.isTitle = false;
+					info.text  =  strjoin("|cffffff00", tostring(PBL_.bans.ban_clases[i]));
+					info.checked = false;
+					info.isNotRadio = true;
+					info.notCheckable = true;
+					info.menuList, info.hasArrow = i, false;	
+					UIDropDownMenu_AddButton(info);
+					info.func = self.SetValue;				
+			end	
+		end			
 	 end	 
 	end)	
 	function dropDown:SetValue()
@@ -266,6 +300,9 @@ function Config:CreateDropDownMenu(point, relativeFrame, relativePoint, yOffset,
 		end
 		if(id == 2)then
 			tmpReaSelected = self.value;
+		end
+		if(id == 3)then
+			tmpClaSelected = self.value;
 		end
 		CloseDropDownMenus();
 	end
@@ -395,7 +432,7 @@ end
 
 function Config:CreateMenu()
 	UIConfig = CreateFrame("Frame", "PBL_Config_", UIParent, "UIPanelDialogTemplate");
-	UIConfig:SetSize(620, 320);
+	UIConfig:SetSize(750, 340);
 	UIConfig:SetPoint("TOP"); -- Doesn't need to be ("CENTER", UIParent, "CENTER")
 	UIConfig:RegisterForDrag("LeftButton");
 	UIConfig:SetMovable(true);
@@ -410,7 +447,7 @@ function Config:CreateMenu()
 	UIConfig.Title:ClearAllPoints();
 	UIConfig.Title:SetFontObject("GameFontHighlight");	
 	UIConfig.Title:SetPoint("CENTER", PBL_Config_TitleBG, "CENTER", 6, 1);
-	UIConfig.Title:SetText("Personal Black List                                                               PBL v1.5");	
+	UIConfig.Title:SetText("Personal Black List                                                                                      PBL v2");	
 	
 	UIConfig.ScrollFrame = CreateFrame("ScrollFrame", nil, UIConfig, "UIPanelScrollFrameTemplate");
 	UIConfig.ScrollFrame:SetPoint("TOPLEFT", PBL_Config_DialogBG, "TOPLEFT", 200, -5);
@@ -431,7 +468,7 @@ function Config:CreateMenu()
 
 	-- BUTTONS!! -- Para: point, relativeFrame, relativePoint, xOffset, yOffset,  text, id
 	-- Add Button: -- 
-	addBtn = self:CreateButton("CENTER", UIConfig, "TOP", -250, -120, L["addBtn"], 1);  -- TODO: OPtimization Wrap parameters in a table
+	addBtn = self:CreateButton("CENTER", UIConfig, "TOP", -300, -120, L["addBtn"], 1);  -- TODO: OPtimization Wrap parameters in a table
 	-- Remove Button:	
 	rmvBtn = self:CreateButton("TOPLEFT", addBtn, "TOPRIGHT", 15, 0, L["removeBtn"], 2);
 
@@ -439,32 +476,36 @@ function Config:CreateMenu()
 	-- Edit Box 1: (Ban List) --
 	banEditBox = self:CreateEditBox("BOTTOM", addBtn, "TOPLEFT", 55, 48, 170, 25, false, false, 1);
 	-- Edit Box 2 (Category List)
-	content1.catEditBox = self:CreateEditBox("TOP", content1, "RIGHT", -30, -95, 170, 450, false, true, 2);
+	content1.catEditBox = self:CreateEditBox("TOP", content1, "RIGHT", -30, -65, 220, 450, false, true, 2);
+	-- Edit Box 4 (Class List)
+	content1.classEditBox = self:CreateEditBox("TOP", content1, "RIGHT", -30, 90, 130, 450, false, true, 4);
 	-- Edit Box 3 (Reason List)
-	content1.reaEditBox = self:CreateEditBox("TOP", content1, "RIGHT", -30, 90, 130, 450, false, true, 3);
+	content1.reaEditBox = self:CreateEditBox("TOP", content1, "RIGHT", -30, 215, 130, 450, false, true, 3);
 
 	-- DROPDOWN MENUS!! -- Para: point, relativeFrame, relativePoint, yOffset, xOffset, width, height, id, txt
 	-- DropDown 1: (Category List) --
 	catDrop = self:CreateDropDownMenu("TOP", addBtn, "BOTTOM", -50, 50, 165, 30, 1, L["dropDownCatTitle"].." ");
 	-- DropDown 2: (Reason List) --
 	reaDrop = self:CreateDropDownMenu("TOP", addBtn, "BOTTOM", -100, 50, 165, 30, 2, L["dropDownReaTitle"].." ");
+	claDrop = self:CreateDropDownMenu("TOP", addBtn, "BOTTOM", -150, 50, 165, 30, 3, L["classTxt"]);
 
 	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont
 	banText = self:CreateTxtInstance("TOPLEFT", addBtn, "TOP", -36, 70, L["insertCharTxt"], 1 , "GameFontNormalLarge");
 	banTextDesc = self:CreateTxtInstance("TOPLEFT", addBtn, "TOP", -30, 22, L["textFormatTxt"], 2, "GameFontDisableSmall");
 	content1.chaText = self:CreateTxtInstance("TOPLEFT", content1, "TOP", -175, -8, L["charNameRealmTxt"], 3, "GameFontNormalLarge");
-	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1, "TOP", 30, -8, L["catReaTxt"], 4 ,"GameFontNormalLarge");
-	authorText = self:CreateTxtInstance("BOTTOM", reaDrop, "BOTTOM", -58, -75, L["createdByTxt"].." Xyløns @ Ragnaros US", 5 , "QuestFontNormalSmall");
+	content1.catReaText = self:CreateTxtInstance("TOPLEFT", content1, "TOP", 160, -8, L["catReaTxt"], 4 ,"GameFontNormalLarge");
+	content1.claText = self:CreateTxtInstance("TOPLEFT", content1, "TOP", 71, -8, L["classTxt"], 5 ,"GameFontNormalLarge");
+	authorText = self:CreateTxtInstance("BOTTOM", reaDrop, "BOTTOM", -58, -90, L["createdByTxt"].." Xyløns @ Ragnaros US", 5 , "QuestFontNormalSmall");
 	----------------------------------
 	-- Content2
 	----------------------------------
 	-- TEXTS!!!! -- Para: point, relativeFrame,relativePoint, yOffset, xOffset, txt, id, gameFont
-	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", -30, 310, L["collaboratorsTxt"], 6, "GameFontNormalLarge");
+	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", 60, 310, L["collaboratorsTxt"], 6, "GameFontNormalLarge");
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
-	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 15, 385, 25, false, true, 4);
-	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nART/Design by Bexonight @ Ragnaros US \nDevelopment by Xyløns & Heomel @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US\n \nTranslations:\nLeoras-Ragnaros (esMX,esES)");
+	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 15, 285, 25, false, true, 4);
+	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nDevelopment by Xyløns ,Heomel @ Ragnaros US\n& Делюбовь @ Howling fjord RU\n \nART/Design by Bexonight @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US\n \nTranslations:\nLeoras-Ragnaros (esMX,esES)");
 
-	populateBanLists();
+	Config:populateBanLists();
 	UIConfig:Hide();
 	return UIConfig;
 end

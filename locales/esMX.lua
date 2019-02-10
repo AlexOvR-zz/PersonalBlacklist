@@ -40,6 +40,7 @@ L["insertCharTxt"] = "Nombre del Personaje"
 L["pblListTab"] = "Lista PBL"
 L["removeBtn"] = "Remover"
 L["textFormatTxt"] = "Formato de texto: Nombre-Reino"
+L["classTxt"] = "Clase"
 
 
 

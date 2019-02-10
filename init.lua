@@ -134,17 +134,33 @@ function core:init(event, name)
 				ban_category = {},
 				ban_categories = {},
 				ban_reasons = {},
+				ban_clases = {},
+				ban_class = {},
 			 }
 		} 
 	end
 
 	if(not PBL_.bans) then PBL_.bans = { }; end
 	if(not PBL_.bans.ban_name) then PBL_.bans.ban_name = { }; end
-	if(not PBL_.bans.ban_reason) then PBL_.bans.ban_reason = { }; end
+
 	if(not PBL_.bans.ban_category) then PBL_.bans.ban_category = { }; end
-	
 	if(not PBL_.bans.ban_categories) then PBL_.bans.ban_categories = { }; end
+
+	if(not PBL_.bans.ban_reason) then PBL_.bans.ban_reason = { }; end
 	if(not PBL_.bans.ban_reasons) then PBL_.bans.ban_reasons = { }; end
+
+	if(not PBL_.bans.ban_class) then PBL_.bans.ban_class = { }; end
+	if(not PBL_.bans.ban_clases) then PBL_.bans.ban_clases = { }; end
+
+	if(PBL_) then
+        bans_n = table.getn(PBL_.bans.ban_name)
+        class_n = table.getn(PBL_.bans.ban_class)
+        if(class_n == 0 and bans_n ~= 0) then
+            for i = 1, bans_n do
+            	table.insert(PBL_.bans.ban_class,"UNKNOWN");
+            end
+        end
+    end
 
 	PBL_.bans.ban_categories = {
 		L["dropDownCat"],
@@ -170,6 +186,21 @@ function core:init(event, name)
 		L["dropDownScam"],
 		L["dropDownRac"]
 	};
+	PBL_.bans.ban_clases = {
+		"CLASS",
+		"WARRIOR",
+		"PALADIN",
+		"HUNTER",
+		"ROGUE",
+		"PRIEST",
+		"SHAMAN",
+		"MAGE",
+		"WARLOCK",
+		"MONK",
+		"DRUID",
+		"DEMONHUNTER",
+		"DEATHKNIGHT"
+	};
 
 	StaticPopupDialogs.CONFIRM_LEAVE_IGNORE = {
 		text = "%s",
@@ -179,35 +210,59 @@ function core:init(event, name)
 		whileDead = 1, hideOnEscape = 1, showAlert = 1,
 	}
 
+	local defaultBL =
+	{
+		LeaveAlert = false,
+	}
+	local indexBL =
+	{
+		[1] = "LeaveAlert",
+	}
+
 	local f = CreateFrame("Frame");
+	local was = "";
 
 	function f:OnEvent(event)
 		if event == "GROUP_ROSTER_UPDATE" then
 			C_Timer.After(2, function()
 				local pjs = {};
+				local fullName="";
+				local name,realm="";
 				for i=1, GetNumGroupMembers() do
-					local name,realm = UnitName("party".. i);
+					if GetNumGroupMembers() < 6 then
+						name,realm = UnitName("party".. i)
+						--print("party=",i,"name=",name,"server=",realm)
+					else
+						name,realm = UnitName("raid".. i)
+						--print("raid=",i,"name=",name,"server=",realm)
+					end
 					if name then
-						if (not realm) or (realm == " ") or (realm == "") then realm = GetRealmName(); end
+						if (not realm) or (realm == " ") or (realm == "") then realm = GetRealmName(); realm=realm:gsub(" ",""); end
 						local fullName = strupper(name.."-"..realm);
 						for j=1, table.getn(PBL_.bans.ban_name) do
 							if PBL_.bans.ban_name[j] == fullName then -- found an ignored player
 								pjs[table.getn(pjs) + 1] = fullName
+								if was ~= fullName then
+									print("|cffff0000".."Here is",fullName,"who is in your BlackList")
+									was = fullName;
+								end
 							end	
 						end
 					end						
 				end
-				if table.getn(pjs) ~= 0 then
-					text = ""
-					for j=1, table.getn(pjs) do
-						text = text..pjs[j].."\n"
+				if PBL_.BL_SavedVariables[indexBL[1]] == false then
+					if table.getn(pjs) ~= 0 then
+						text = ""
+						for j=1, table.getn(pjs) do
+							text = text..pjs[j].."\n"
+						end
+						if table.getn(pjs) > 1 then
+							text = text..L["confirmMultipleTxt"]
+						else
+							text = text..L["confirmSingleTxt"]
+						end
+						StaticPopup_Show("CONFIRM_LEAVE_IGNORE", text);
 					end
-					if table.getn(pjs) > 1 then
-						text = text..L["confirmMultipleTxt"]
-					else
-						text = text..L["confirmSingleTxt"]
-					end
-					StaticPopup_Show("CONFIRM_LEAVE_IGNORE", text);
 				end
 
 			end)
@@ -218,13 +273,17 @@ function core:init(event, name)
 
 GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	local name, unit = self:GetUnit()
-	if UnitIsPlayer(unit) and not UnitIsUnit(unit, "player") and not UnitIsUnit(unit, "party") then
-		local name, realm = UnitName(unit)
-		name = name .. "-" .. (realm or GetRealmName())
-		if has_value(PBL_.bans.ban_name, strupper(name)) then		
+		if UnitIsPlayer(unit) and not UnitIsUnit(unit, "player") and not UnitIsUnit(unit, "party") then
+			local name, realm = UnitName(unit)
+			if realm == nil then
+				realm=GetRealmName()
+				realm=realm:gsub(" ","");
+			end
+			name = name .. "-" .. realm;
+			if has_value(PBL_.bans.ban_name, strupper(name)) then
 				self:AddLine("PBL Blacklisted!", 1, 0, 0, true)	
+			end
 		end
-	end
 end)
 
 local hooked = { }
@@ -247,14 +306,15 @@ hooksecurefunc("LFGListApplicationViewer_UpdateResults", function(self)
 							local appID = button.applicantID;
 							local name = C_LFGList.GetApplicantMemberInfo(appID, 1);
 							if not string.match(name, "-") then
-								name = name.."-"..GetRealmName();
+								local realm = GetRealmName();
+								realm=realm:gsub(" ","");
+								name = name.."-"..realm;
 							end
 							if has_value(PBL_.bans.ban_name, strupper(name)) then			
 								GameTooltip:AddLine("PBL Blacklisted!",1,0,0,true);
 								GameTooltip:Show();
 							end
-						end
-						)
+						end)
 						b:HookScript("OnLeave", OnLeaveHook)
 					end
 				end
@@ -262,6 +322,141 @@ hooksecurefunc("LFGListApplicationViewer_UpdateResults", function(self)
 		end
 	end
 end)
+-----------------
+--
+-----------------
+local PopUpBan = CreateFrame("Frame","PopUpBanFrame")
+PopUpBan:SetScript("OnEvent", function() hooksecurefunc("UnitPopup_OnClick", AddToBan) end)
+PopUpBan:RegisterEvent("PLAYER_LOGIN")
+local PopupUnits = {}
+UnitPopupButtons["GiveABan"] = { text = "Give PBL Ban", }
+
+for i,UPMenus in pairs(UnitPopupMenus) do
+  for j=1, #UPMenus do
+    if UPMenus[j] == "INSPECT" then
+      PopupUnits[#PopupUnits + 1] = i
+      pos = j + 1
+      table.insert( UnitPopupMenus[i] ,pos , "GiveABan" )
+      break
+    end
+  end
+end
+
+function AddToBan (self)
+ local button = self.value;
+ if ( button == "GiveABan" ) then
+  local dropdownFrame = UIDROPDOWNMENU_INIT_MENU;
+  local unit = dropdownFrame.unit;
+  local name = dropdownFrame.name;
+  local server = "";
+  server = dropdownFrame.server;
+  local className,classFile,classID = UnitClass(unit);
+  --print ("name=",name,"server=",server);
+	if server==nil or server=="" then
+		local realm = GetRealmName();
+		server=realm:gsub(" ","");
+		--print("server=",server);
+	end
+   local fullname = name.."-"..server;
+   --print("fullname=",fullname)
+  if (fullname ~= nil or fullname ~= "") then
+		local banexist = 0;
+		for i=1, table.getn(PBL_.bans.ban_name) do
+			--print("banname=",PBL_.bans.ban_name[i])
+			if PBL_.bans.ban_name[i] == strupper(fullname) then
+				table.remove(PBL_.bans.ban_name, i);
+				table.remove(PBL_.bans.ban_class, i);
+				table.remove(PBL_.bans.ban_category, i);
+				table.remove(PBL_.bans.ban_reason, i);
+				core.Config:populateBanLists();
+				print("|cffff0000"..fullname.." Removed from BlackList")				
+				banexist = 1;
+				break
+			end
+		end
+		if (banexist == 0) then				
+				table.insert(PBL_.bans.ban_name,strupper(fullname));
+				table.insert(PBL_.bans.ban_category,PBL_.bans.ban_categories[2]);
+				table.insert(PBL_.bans.ban_reason,PBL_.bans.ban_reasons[2]);
+				table.insert(PBL_.bans.ban_class,classFile);
+				core.Config:populateBanLists();
+				print("|cffff0000"..fullname.." Succesfully Banned for PBL!")
+		end
+	else
+		DEFAULT_CHAT_FRAME:AddMessage("|cffffff00Error: No name provided.");
+	end
+ end
+end
+--------------------
+---
+--------------------
+
+if PBL_.BL_SavedVariables == nil then
+	--print(defaultBL)
+	PBL_.BL_SavedVariables = defaultBL;
+else
+	--print("2")
+	for key, value in pairs(defaultBL) do
+		if PBL_.BL_SavedVariables[key] == nil then
+			PBL_.BL_SavedVariables[key] = value
+		end
+	end
+end
+
+BL = {}
+BL.panel = CreateFrame("Frame", "BL_Panel", UIParent)
+BL.panel.name = "Black list"
+InterfaceOptions_AddCategory (BL.panel)
+
+local buttonList = {}
+
+function createCheckButton(i, x, y)
+	local list = 
+	{
+		" Leave Alert",
+		" Disable double click targeting in combat",
+		" Disable right click targeting out of combat",
+		" Disable double click targeting out of combat",
+	}
+	local checkButton = CreateFrame("CheckButton", "BL_CheckButton" .. i, BL.panel, "UICheckButtonTemplate")
+	buttonList[i] = checkButton
+	checkButton:ClearAllPoints()
+	checkButton:SetPoint("TOPLEFT", x * 32, y * -32)
+	checkButton:SetSize(32, 32)
+	_G[checkButton:GetName() .. "Text"]:SetText(list[i])
+	_G[checkButton:GetName() .. "Text"]:SetFont(GameFontNormal:GetFont(), 14, "NONE")
+	buttonList[i]:SetScript("OnClick", function()
+		if buttonList[i]:GetChecked() then
+			--print("get1",i,PBL_.BL_SavedVariables[indexBL[i]])
+			PBL_.BL_SavedVariables[indexBL[i]] = false
+		else
+			--print("get2",i,PBL_.BL_SavedVariables[indexBL[i]])
+			PBL_.BL_SavedVariables[indexBL[i]] = true
+		end
+		--print("ss",i)
+		setupButtons()
+	end)
+end
+
+createCheckButton(1, 1, 1)
+
+function setupButtons()
+	for i = 1, #buttonList do
+			if PBL_.BL_SavedVariables[indexBL[i]] then
+				buttonList[i]:SetChecked(false)
+			else
+				buttonList[i]:SetChecked(true)
+			end
+		--end
+	end
+end
+
+local func1 = CreateFrame("Frame")
+func1:RegisterEvent("ADDON_LOADED")
+func1:SetScript("OnEvent", setupButtons)
+-----------------------
+---
+-----------------------
 
 function has_value (tab, val)
     for index, value in ipairs(tab) do

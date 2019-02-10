@@ -27,7 +27,7 @@ L["dropDownGuild"] = "Guild"
 L["dropDownMythic"] = "Mythics+"
 L["dropDownNinja"] = "Ninja"
 L["dropDownPvP"] = "PvP"
-L["dropDownQuit"] = "Quiter"
+L["dropDownQuit"] = "Quitter"
 L["dropDownRac"] = "Racist"
 L["dropDownRaid"] = "Raid"
 L["dropDownRea"] = "Reasons"
@@ -40,5 +40,7 @@ L["insertCharTxt"] = "Insert Character Name"
 L["pblListTab"] = "PBL - List"
 L["removeBtn"] = "Remove"
 L["textFormatTxt"] = "text format: name-realm"
+L["classTxt"] = "Class"
+
 
 

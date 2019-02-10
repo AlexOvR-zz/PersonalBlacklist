@@ -27,7 +27,7 @@ This Blacklist record will allow you to always remember the names of those undes
 WHAT'S NEW ?
 
 
--New Functionality on portrait right clikc to direct add the person to the PBL Ban List
+-New Functionality on portrait right click to direct add the person to the PBL Ban List
 
 -New Class Column and DropDown
 

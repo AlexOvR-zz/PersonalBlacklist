@@ -33,5 +33,13 @@ WHAT'S NEW ?
 
 -New Class Recolor for Ban List
 
+9.0.2Dev Branch Changes:
 
+- Added support for patch 9.0.2 by updating the BackDrop API functions (see: https://github.com/Stanzilla/WoWUIBugs/wiki/9.0.1-Consolidated-UI-Changes#backdrop-system-changes)
+
+- Updated the Class dropdown list to be alphabetical
+
+- Updated the Leave Party function from LeaveParty to C_PartyInfo.LeaveParty() (see: https://wow.gamepedia.com/API_C_PartyInfo.LeaveParty)
+
+- Known Issue: In the Ban List, the class color for the 9th item listed is duplicated onto all remaining items. I'm not smart enough to fix this.
  

@@ -1,4 +1,4 @@
-﻿--------------------------------------
+--------------------------------------
 -- Namespaces
 --------------------------------------
 local _, core = ...;
@@ -57,7 +57,7 @@ function Config:populateBanLists()
 	editBox2:SetText("");
 	editBox3:SetText("");
 	editBox4:SetText("");
-	local color={[0]="|cff9d9d9d",[1]="|cffc79c6e",[2]="|cfff58cba",[3]="|cffabd473",[4]="|cfffff569",[5]="|cffffffff",[6]="|cff0070de",[7]="|cff69ccf0",[8]="|cff9482c9",[9]="|cff558a84",[10]="|cffff7d0a",[11]="|cff9900ff",[12]="|cffc41f3b"}
+	local color={[0]="|cff9d9d9d",[1]="|cffc41f3b",[2]="|cff9900ff",[3]="|cffff7d0a",[4]="|cffabd473",[5]="|cff69ccf0",[6]="|cff558a84",[7]="|cfff58cba",[8]="|cffffffff",[9]="|cfffff569",[10]="|cff0070de",[11]="|cff9482c9",[12]="|cffc79c6e"}
 	local j = 1
 	local numcolor = 0;
 
@@ -152,15 +152,16 @@ function Config:checkBanList()
 end
 
 function Config:CreateButton(point, relativeFrame, relativePoint, xOffset, yOffset, text, id)
-	local btn = CreateFrame("Button", "btn"..id, relativeFrame, "GameMenuButtonTemplate");
-	btn:SetBackdrop({
+	local btn = CreateFrame("Button", "btn"..id, relativeFrame, "GameMenuButtonTemplate", "BackdropTemplate");
+	btn.backdropInfo = {
 		bgFile = [[Interface\Buttons\WHITE8x8]],
 		edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
 		edgeSize = 14,
 		insets = {left = 0, right = 0, top = 0, bottom = 0},
-	})
-	btn:SetBackdropBorderColor(0.3, 0.3, 0.3,1);
-	btn:SetBackdropColor(0,0,0,0.8);
+	}
+	--btn:ApplyBackdrop()
+	btn.BackdropBorderColor = {0.3, 0.3, 0.3,1}
+	btn.BackdropColor = {0,0,0,0.8}
 	btn:SetPoint(point, relativeFrame, relativePoint, xOffset, yOffset);
 	btn:SetSize(80, 30);
 	btn:SetText(text);
@@ -207,20 +208,21 @@ function Config:CreateTxtInstance(point, relativeFrame,relativePoint, yOffset, x
 end
 
 function Config:CreateEditBox(point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id)
-	local editBox = CreateFrame("EditBox", "editBox"..id ,relativeFrame);
-	editBox:SetBackdrop({
+	local editBox = CreateFrame("EditBox", "editBox"..id ,relativeFrame, "BackdropTemplate");
+	editBox.backdropInfo = {
 		bgFile = [[Interface\Buttons\WHITE8x8]],
 		edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
 		edgeSize = 14,
 		insets = {left = 0, right = 0, top = 0, bottom = 0},
-	})
+	}
+	--editBox:ApplyBackdrop()
 	if(id == 1)then
-		editBox:SetBackdropColor(0,0,0,0.8);
-		editBox:SetBackdropBorderColor(0.3, 0.3, 0.3,1);
+		editBox.BackdropColor = {0,0,0,0.8};
+		editBox.BackdropBorderColor = {0.3, 0.3, 0.3,1};
 		editBox:SetJustifyH("LEFT");
 	else
-		editBox:SetBackdropColor(0, 0, 0,0);
-		editBox:SetBackdropBorderColor(0, 0, 0,0);
+		editBox.BackdropColor = {0, 0, 0,0};
+		editBox.BackdropBorderColor = {0, 0, 0,0};
 		editBox:EnableMouse(false);
 		editBox:EnableKeyboard(false);
 		editBox:SetJustifyH("CENTER");
@@ -503,7 +505,7 @@ function Config:CreateMenu()
 	content2.collaText = self:CreateTxtInstance("TOP", content2, "BOTTOM", 60, 310, L["collaboratorsTxt"], 6, "GameFontNormalLarge");
 	-- EDIT BOXES!! -- Para:  point, relativeFrame, relativePoint, yOffset, xOffset, width, height, autoFocus, multiline, id
 	content2.collaBox = self:CreateEditBox("TOP", content2.collaText, "TOPLEFT", -35, 15, 285, 25, false, true, 4);
-	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nDevelopment by Xyløns ,Heomel @ Ragnaros US\n& Делюбовь @ Howling fjord RU\n \nART/Design by Bexonight @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US\n \nTranslations:\nLeoras-Ragnaros (esMX,esES)");
+	content2.collaBox:SetText("Author: \nCreated by Xyløns @ Ragnaros US\n \nDevelopment by Xyløns ,Heomel @ Ragnaros US\n& Делюбовь @ Howling fjord RU\n \n9.0.2 Fixes by Sinecure @ Hyjal US\n \nART/Design by Bexonight @ Ragnaros US \n \nTesting \nGuild <Paradøx> @ Ragnaros US\nLeoras @ Ragnaros US \nAreda @ Ragnaros US\nErzuliee @ Ragnaros US\n \nTranslations:\nLeoras-Ragnaros (esMX,esES)");
 
 	Config:populateBanLists();
 	UIConfig:Hide();

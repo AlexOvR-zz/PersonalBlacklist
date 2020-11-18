@@ -188,25 +188,25 @@ function core:init(event, name)
 	};
 	PBL_.bans.ban_clases = {
 		"CLASS",
-		"WARRIOR",
-		"PALADIN",
-		"HUNTER",
-		"ROGUE",
-		"PRIEST",
-		"SHAMAN",
-		"MAGE",
-		"WARLOCK",
-		"MONK",
-		"DRUID",
+		"DEATHKNIGHT",
 		"DEMONHUNTER",
-		"DEATHKNIGHT"
+		"DRUID",
+		"HUNTER",
+		"MAGE",
+		"MONK",
+		"PALADIN",
+		"PRIEST",
+		"ROGUE",
+		"SHAMAN",
+		"WARLOCK",
+		"WARRIOR"
 	};
 
 	StaticPopupDialogs.CONFIRM_LEAVE_IGNORE = {
 		text = "%s",
 		button1 = L["confirmYesBtn"],
 		button2 = L["confirmNoBtn"],
-		OnAccept = LeaveParty,
+		OnAccept = C_PartyInfo.LeaveParty(),
 		whileDead = 1, hideOnEscape = 1, showAlert = 1,
 	}
 
